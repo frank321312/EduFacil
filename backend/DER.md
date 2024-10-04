@@ -7,6 +7,21 @@
         INT IdRol PK
     }
 
+    UsuarioNoValidado {
+        VARCHAR(45) NombreUsuario
+        VARCHAR(45) Nombre
+        VARCHAR(45) Apellido
+        VARCHAR(75) Email
+        VARCHAR(45) Password
+        INT IdUsuarioNoValidado PK
+        BOOL Bloqueado
+        BOOL Habilitado
+        DATETIME FechaIngreso
+        VARCHAR(5) Codigo
+        INT IdRol FK
+        INT IdEscuela FK
+    }
+
     Usuario {
         VARCHAR(45) NombreUsuario
         VARCHAR(45) Nombre
@@ -18,8 +33,20 @@
         BOOL Habilitado
         DATETIME FechaIngreso
         DATETIME FechaEgreso
-        VARCHAR(10) Codigo
+        VARCHAR(5) Codigo
         INT IdRol FK
+        INT IdEscuela FK
+    }
+  
+    EscuelaNoValidada {
+        INT IdEscuela PK
+        VARCHAR(150) Nombre
+        VARCHAR(75) Email
+        VARCHAR(100) Direccion
+        VARCHAR(20) Telefono
+        VARCHAR(5) Codigo
+        BOOL Bloqueado
+        DATETIME FechaIngreso
     }
 
     Escuela {
@@ -28,13 +55,22 @@
         VARCHAR(75) Email
         VARCHAR(100) Direccion
         VARCHAR(20) Telefono
-        VARCHAR(10) Codigo
+        VARCHAR(5) Codigo
+        BOOL Bloqueado
         DATETIME FechaIngreso
         DATETIME FechaEgreso
-        BOOL Bloqueado
     }
 
     Horario {
+        INT IdHorario PK
+        INT idCurso FK
+        VARCHAR(25) Hora
+        VARCHAR(25) Duracion
+    }
+
+    Dia {
+        INT IdDia PK
+        VARCHAR(20) Nombre
         INT idCurso FK
     }
 
@@ -44,10 +80,21 @@
         VARCHAR(45) Nombre
     }
 
+    HorarioMateria {
+        INT IdHorario PK, FK
+        INT IdMateria PK, FK
+    }
+
     Curso {
         INT idCurso PK
-        TYNINT Anio
+        SMALLINT Anio
         CHAR Division
         INT IdEscuela FK
+        INT IdTurno FK
+    }
+
+    Turno {
+        INT IdTurno
+        VARCHAR(45) Nombre
     }
 ```
