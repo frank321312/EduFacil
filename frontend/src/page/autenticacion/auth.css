@@ -1,0 +1,29 @@
+.opcion-animation {
+    animation-name: opcion;
+    animation-duration: 1s;
+}
+
+.formulario > div > div {
+    margin-bottom: 15px;
+}
+
+@keyframes opcion {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 416px) {
+    .contenedor-opcion {
+        padding: 60px;
+    }
+
+    .formulario {
+        width: 300px;
+        padding: 40px 10px;
+    }
+}
