@@ -54,10 +54,47 @@ export class CursoController {
     }
 
     async eliminarCurso(req: Request, res: Response) {
-        throw new Error("Method not implemented.");
+        try {
+            const { idCurso } = req.params
+            const curso = await AppDataSource.getRepository(Curso).findOneByOrFail({ idCurso: Number(idCurso) })
+            await AppDataSource.getRepository(Curso).delete(curso)
+            res.status(204).send()
+        } catch (error) {
+            if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "Curso no encontrado", numero: 5 })
+            } else {
+                res.status(500).json({ message: "No se pudo eliminar el curso", numero: 6 })
+            }
+        }
     }
 
     async modificarCurso(req: Request, res: Response) {
-        throw new Error("Method not implemented.");
+        try {
+            const { anio, division, idTurno, idCurso } = req.body
+            const turno = await AppDataSource.getRepository(Turno).findOneByOrFail({ idTurno })
+            await AppDataSource.getRepository(Curso).update({ idCurso }, { anio, division, turno })
+            res.status(204).send()
+        } catch (error) {
+            if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "Curso no encontrado", numero: 7 })
+            } else {
+                res.status(500).json({ message: "No se pudo modificar el curso", numero: 8 })
+            }
+        }
+    }
+
+    async obtenerCurso(req: Request, res: Response) {
+        try {
+            const { search } = req.params
+            
+            const curso = await AppDataSource.getRepository(Curso).findOneByOrFail({ idCurso })
+            res.status(200).json(curso)
+        } catch (error) {
+            if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "Curso no encontrado", numero: 7 })
+            } else {
+                res.status(500).json({ message: "No se pudo obtener el curso ", numero: 8 })
+            }
+        }
     }
 }

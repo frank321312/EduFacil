@@ -3,11 +3,14 @@
 ### Obtener todos los cursos
 GET {{Api_HostAddress}}/api/obtenercursos
 
+### Crear curso
 POST {{Api_HostAddress}}/api/crearcurso
 Content-Type: application/json
 {
     "anio": "6",
-    "division": "7-3-1-2-7-9-",
+    "division": "7-3-1-2-4-9-",
     "idEscuela": "2",
     "idTurno": "1"
 }
+
+### Obtener curso por año o division o todo junto

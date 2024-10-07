@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useRef } from 'react'
-import PaginaPrincipal from './page/inicio/inicio'
+import PaginaPrincipal from './page/inicio/Inicio'
 import Registro from './page/autenticacion/Registro'
 import ElegirOpcion from './page/autenticacion/Opcion'
 import IniciarSesion from './page/autenticacion/IniciarSesion'

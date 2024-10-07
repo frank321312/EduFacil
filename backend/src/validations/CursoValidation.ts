@@ -12,7 +12,13 @@ export const validarAnio = (anio: string) => {
 
 export const validarDivision = (division: string) => {
     const divisionList = division.split("-")
-    console.log(divisionList)
+
+    for (const index of divisionList) {
+        const tieneDosElementos = divisionList.filter(x => x == index)
+        if (tieneDosElementos.length > 1) {
+            throw new ValidationError("No puede haber divisiones repetidas")
+        }
+    }
     if (!/^[a-zA-Z0-9-]+$/g.test(division)) {
         throw new ValidationError("Texto invalido")
     } else if (division.length > 50) {
