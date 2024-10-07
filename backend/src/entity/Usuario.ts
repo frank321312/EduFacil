@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { Rol } from "./Rol.js";
+import { Escuela } from "./Escuela.js";
 
 @Entity()
 export class Usuario {
@@ -39,4 +40,8 @@ export class Usuario {
     @ManyToOne(() => Rol, (r) => r.usuarios)
     @JoinColumn({ name: "idRol" })
     rol: Rol
+
+    @ManyToOne(() => Escuela, (e) => e.usuarios)
+    @JoinColumn({ name: "idEscuela" })
+    escuela: Relation<Escuela>
 }

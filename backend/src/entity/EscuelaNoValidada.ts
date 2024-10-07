@@ -1,12 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Materia } from './Materia.js';
-import { Curso } from './Curso.js';
-import { Usuario } from './Usuario.js';
 
 @Entity()
-export class Escuela {
+export class EscuelaNoValidada {
     @PrimaryGeneratedColumn()
-    idEscuela: number;
+    idEscuelaNV: number;
 
     @Column("varchar", { length: 150 })
     nombre: string;
@@ -26,21 +23,6 @@ export class Escuela {
     @Column("varchar", { length: 255 })
     imgUrl: string;
 
-    @Column("boolean", { default: false })
-    bloqueado: boolean;
-
     @Column("datetime")
     fechaIngreso: Date;
-
-    @Column("datetime", { nullable: true })
-    fechaEgreso: Date | null;
-
-    @OneToMany(() => Curso, (c) => c.escuela)
-    cursos: Curso[]
-
-    @OneToMany(() => Materia, (m) => m.escuela)
-    materias: Materia[]
-
-    @OneToMany(() => Usuario, (u) => u.escuela)
-    usuarios: Usuario[]
 }

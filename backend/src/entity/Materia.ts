@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Escuela } from "./Escuela";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Escuela } from "./Escuela.js";
 
 @Entity()
 export class Materia {
@@ -10,5 +10,5 @@ export class Materia {
     nombre: string
     
     @ManyToOne(() => Escuela, (e) => e.materias)
-    escuela: Escuela
+    escuela: Relation<Escuela>
 }

@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Curso } from "./Curso";
+import { Curso } from "./Curso.js";
 
 @Entity()
 export class Horario {

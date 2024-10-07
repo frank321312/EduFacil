@@ -1,20 +1,35 @@
-import { AppDataSource } from "./data-source"
-import { User } from "./entity/User"
+import { AppDataSource } from "./data-source.js";
+import express from 'express';
+import cursoRoutes from './routes/CursoRoute.js'
+import { Rol } from "./entity/Rol.js";
+import { insertCurso } from "./inserts/InsertCurso.js";
+import { insertEscuela, insertEscuelaNV } from "./inserts/InsertEscuela.js";
+import { insertRol } from "./inserts/InsertRol.js";
+import insertTurno from "./inserts/InsertTurno.js";
+import { insertUsuario, insertUsuarioNV } from "./inserts/InsertUsuario.js";
+import cors from 'cors';
 
 AppDataSource.initialize().then(async () => {
-
-    console.log("Inserting a new user into the database...")
-    const user = new User()
-    user.firstName = "Timber"
-    user.lastName = "Saw"
-    user.age = 25
-    await AppDataSource.manager.save(user)
-    console.log("Saved a new user with id: " + user.id)
-
-    console.log("Loading users from the database...")
-    const users = await AppDataSource.manager.find(User)
-    console.log("Loaded users: ", users)
-
-    console.log("Here you can setup and run express / fastify / any other framework.")
-
+    console.log("Conexion existosa con la base de datos")
+    const rol = await AppDataSource.getRepository(Rol).exists({ where: { idRol: 1 } })
+    if (!rol) {
+        await insertRol(),
+        await insertTurno(),
+        await insertEscuela(),
+        await insertEscuelaNV(),
+        await insertCurso(),
+        await insertUsuario(),
+        await insertUsuarioNV()
+    }
 }).catch(error => console.log(error))
+
+const app = express()
+app.use(express.json())
+app.use(cors())
+const PORT = process.env.PORT || 6008
+
+app.use("/api", cursoRoutes)
+
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`)
+})

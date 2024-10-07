@@ -56,6 +56,7 @@
         VARCHAR(100) Direccion
         VARCHAR(20) Telefono
         VARCHAR(5) Codigo
+        VARCHAR(255) imagenUrl
         BOOL Bloqueado
         DATETIME FechaIngreso
         DATETIME FechaEgreso
@@ -97,4 +98,11 @@
         INT IdTurno
         VARCHAR(45) Nombre
     }
+
+    Rol ||--o{ Usuario : ""
+    Curso }o--|| Turno: ""
+    Curso ||--|| Horario: ""
+    Escuela ||--o{ Usuario: ""
+    Horario ||--o{ HorarioMateria: ""
+    Materia ||--o{ HorarioMateria: ""
 ```

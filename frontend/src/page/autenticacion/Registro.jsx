@@ -4,17 +4,19 @@ import './auth.css';
 import LayoutAuth from "./LayoutAuth";
 import ColForm from "../../components/ColForm";
 import { useEffect } from 'react';
+import { useSelector } from "react-redux";
 
 export default function Registro() {
-    const location = useLocation()
     const navigate = useNavigate()
-    const { idRol } = location.state || {}
+    const idRol = useSelector(state => state.auth.value)
     
-    useEffect(() => {
-        if (idRol === undefined) {
-            navigate("/");
-        }
-    }, [])
+    // const { idRol } = location.state || {}
+    
+    // useEffect(() => {
+    //     if (idRol === undefined) {
+    //         navigate("/");
+    //     }
+    // }, [])
 
     return (
         <>

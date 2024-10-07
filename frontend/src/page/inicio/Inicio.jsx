@@ -7,31 +7,52 @@ import { FaFacebook, FaInstagramSquare, FaMoon } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { IoLogoLinkedin } from "react-icons/io";
 import { AiFillCodeSandboxSquare } from "react-icons/ai";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { activeModeDark, deactivateModeDark } from '../../redux/darkMode';
 
 export default function PaginaPrincipal() {
     const navigate = useNavigate()
+    const navBarRef = useRef(null)
+    // const [active, setActive] = useState(false);
+    const acitve = useSelector((state) => state.darkMode.active)
+    const classModeDark = useSelector((state) => state.darkMode.class)
+    const dispatch = useDispatch()
+    console.log(classModeDark);
+    console.log(acitve);
+    
+    const toggleClassDarkMode = () => {
+        document.body.classList = ""
+        if (!acitve) {
+            dispatch(activeModeDark())
+            document.body.classList.add(classModeDark)
+        } else {
+            dispatch(deactivateModeDark())
+            document.body.classList.add(classModeDark)
+        }
+    }
 
     return (
         <>
             <header>
-                <Navbar expand="lg" className="shadow-sm bg-white" fixed='top'>
+                <Navbar expand="lg" className="shadow-sm bg-white nav-dark-mode" ref={navBarRef} fixed='top'>
                     <Container fluid className='justify-between'>
                         <Navbar.Brand href="#" className='nav-logo pl-6'>EduFacil</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav" className='justify-end pr-6'>
                             <Nav className="gap-4 cotenedor-link">
-                                <Nav.Link onClick={() => navigate("/opcion")}>Registrarse</Nav.Link>
-                                <Nav.Link onClick={() => navigate("/iniciarsesion")}>Iniciar sesión</Nav.Link>
+                                <Nav.Link as={Link} to="/autenticacion/opcion">Registrarse</Nav.Link>
+                                <Nav.Link as={Link} to="/autenticacion/iniciarsesion">Iniciar sesión</Nav.Link>
                                 <Nav.Item className='flex justify-center flex-col cursor-pointer'>
-                                    <FaMoon fontSize={20} />
+                                    <FaMoon fontSize={20} onClick={toggleClassDarkMode} />
                                 </Nav.Item>
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
             </header>
-            <Container fluid className='mt-52'>
+            <Container fluid className='pt-52'>
                 <Row className='justify-center'>
                     <Col xxl={6} lg={8} sm={8} xs={9}>
                         <p className='text-2xl parrafo-repsonsive'>
@@ -107,7 +128,7 @@ export default function PaginaPrincipal() {
                             <p className='mb-2'><b>Nuestra pagina oficial</b></p>
                             <div className='flex gap-3 cursor-pointer'>
                                 <AiFillCodeSandboxSquare color='black' fontSize={24} />
-                                <a href="https://google.com" target='_blank' style={{ textDecoration: "none", color: "#000" }}>BoosTail</a>
+                                <a href="https://google.com" target='_blank' style={{ textDecoration: "none", color: "#000" }}>TailBoos</a>
                             </div>
                         </div>
                     </Col>

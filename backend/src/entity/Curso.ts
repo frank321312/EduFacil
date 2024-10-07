@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Escuela } from "./Escuela";
-import { Turno } from "./Turno";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Escuela } from "./Escuela.js";
+import { Turno } from "./Turno.js";
 
 @Entity()
 export class Curso {
@@ -10,14 +10,14 @@ export class Curso {
     @Column("smallint")
     anio: number
 
-    @Column("char")
+    @Column("varchar", { length: 3 })
     division: string
 
     @ManyToOne(() => Escuela, (e) => e.cursos)
     @JoinColumn({ name: "idEscuela" })
-    escuela: Escuela
+    escuela: Relation<Escuela>
 
-    @OneToOne(() => Turno)
+    @ManyToOne(() => Turno, (t) => t.curso)
     @JoinColumn({ name: "idTurno" })
     turno: Turno
 }

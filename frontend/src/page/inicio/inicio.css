@@ -16,6 +16,25 @@
     object-fit: cover;
 }
 
+/* .mode-dark {
+    background-color: #343a40 !important;
+    box-shadow: 5px 5px 18px #000 !important;
+} */
+
+.mode-dark * {
+    background-color: #343a40 !important;
+    color: #fff !important;
+}
+
+.mode-dark .nav-dark-mode {
+    background-color: #343a40 !important;
+    box-shadow: 5px 5px 18px #000 !important;
+}
+
+.mode-dark {
+    background-color: #28a745;
+}
+
 @media (max-width: 640px) {
     .parrafo-repsonsive {
         font-size: 20px;
