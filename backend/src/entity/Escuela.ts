@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 import { Materia } from './Materia.js';
 import { Curso } from './Curso.js';
 import { Usuario } from './Usuario.js';
@@ -21,19 +21,16 @@ export class Escuela {
     telefono: string;
 
     @Column("varchar", { length: 5 })
-    codigo: string;
+    codigo: string | null;
 
-    @Column("varchar", { length: 255 })
+    @Column("varchar", { length: 255, nullable: true })
     imgUrl: string;
-
-    @Column("boolean", { default: false })
-    bloqueado: boolean;
 
     @Column("datetime")
     fechaIngreso: Date;
 
-    @Column("datetime", { nullable: true })
-    fechaEgreso: Date | null;
+    @DeleteDateColumn()
+    deletedAt: Date | null;
 
     @OneToMany(() => Curso, (c) => c.escuela)
     cursos: Curso[]

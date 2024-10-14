@@ -24,7 +24,7 @@ export const insertarUsuarioNV = async (usuario: UsuarioType, idRol: number, idE
             idEscuela
         }).execute()
 
-    return user.generatedMaps[0].idUsuarioNV
+    return user.generatedMaps[0].idUsuarioNV as number
 }
 
 export const insertarUsuario = async (usuario: UsuarioType, rol: Rol, escuela: Escuela) => {
@@ -34,13 +34,11 @@ export const insertarUsuario = async (usuario: UsuarioType, rol: Rol, escuela: E
         .values({
             ...usuario,
             fechaIngreso: new Date(),
-            fechaEgreso: null,
-            bloqueado: false,
             habilitado: false,
             rol,
             escuela
         }).execute()
-    
+
     return await obtenerDatoUsuarioAuth(user.generatedMaps[0].idUsuario)
 }
 
@@ -48,9 +46,11 @@ export const obtenerDatoUsuarioAuth = async (id: number) => {
     // const { idUsuario, nombreUsuario } = await AppDataSource.getRepository(Usuario).findOne({ where: { idUsuario: id }, relations: ["escuela"] })
 
     // return { idUsuario, nombreUsuario }
-    const user = await AppDataSource.getRepository(Usuario).findOne({ where: { idUsuario: id }, relations: { escuela: true, rol: true }, select: { escuela: { idEscuela: true }, idUsuario: true, nombreUsuario: true, rol: { idRol: true } } })
+    const user = await AppDataSource.getRepository(Usuario).findOneOrFail({ where: { idUsuario: id }, relations: { escuela: true, rol: true }, select: { escuela: { idEscuela: true }, idUsuario: true, nombreUsuario: true, rol: { idRol: true } } })
 
     return user
 }
 
 export const obtenerDatoUsuarioAll = async (idUsuario: number) => await AppDataSource.getRepository(Usuario).findBy({ idUsuario })
+
+export const generarNumeroCincoDigitos = () => Math.floor(10000 + Math.random() * 90000)

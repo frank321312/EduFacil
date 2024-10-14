@@ -1,6 +1,8 @@
 import { AppDataSource } from "./data-source.js";
 import express from 'express';
 import cursoRoutes from './routes/CursoRoute.js'
+import usuarioRoutes from './routes/UsuarioRoute.js'
+import escuelaRoutes from './routes/EscuelaRoute.js'
 import { Rol } from "./entity/Rol.js";
 import { insertCurso } from "./inserts/InsertCurso.js";
 import { insertEscuela, insertEscuelaNV } from "./inserts/InsertEscuela.js";
@@ -29,6 +31,8 @@ app.use(cors())
 const PORT = process.env.PORT || 6008
 
 app.use("/api", cursoRoutes)
+app.use("/api", usuarioRoutes)
+app.use("/api", escuelaRoutes)
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`)

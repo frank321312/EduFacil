@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source.js";
 import { Curso } from "../entity/Curso.js";
-import { validarAnio, validarDivision } from "../validations/CursoValidation.js";
+import { existeCurso, validarAnio, validarDivision } from "../validations/CursoValidation.js";
 import { obtenerEscuela } from "../functions/EscuelaFunc.js";
 import { Turno } from "../entity/Turno.js";
+import { EntityNotFoundError } from "typeorm";
+import { isNumber } from "../validations/CursoValidation.js";
 
 export class CursoController {
     async obtenerCursos(_req: Request, res: Response) {
@@ -22,6 +24,7 @@ export class CursoController {
             validarAnio(anio)
             validarDivision(division)
             const divisionList: string[] = division.split("-")
+            await existeCurso(anio, divisionList)
             if (divisionList[divisionList.length - 1] == "") {
                 divisionList.pop()
             }
@@ -41,14 +44,14 @@ export class CursoController {
             res.status(204).send()
         } catch (error) {
             if (error.name === "ValidationError") {
-                res.status(400).json({ message: error.message, numero: 1})
+                res.status(400).json({ message: error.message, numero: error.error })
             } else if (error.name === "EntityNotFoundError") {
-                res.status(404).json({ message: "Registro no encontrado", numero: 2 })
+                res.status(404).json({ message: "Registro no encontrado", numero: 10 })
             } else if (error.name === "TypeError") {
-                res.status(400).json({ message: error.message, numero: 3})
+                res.status(400).json({ message: error.message, numero: 11 })
             } else {
                 console.log(error)
-                res.status(500).json({ message: "No se pudo crear el curso", numero: 4 })
+                res.status(500).json({ message: "No se pudo crear el curso", numero: 12 })
             }
         }
     }
@@ -61,24 +64,27 @@ export class CursoController {
             res.status(204).send()
         } catch (error) {
             if (error.name === "EntityNotFoundError") {
-                res.status(404).json({ message: "Curso no encontrado", numero: 5 })
+                res.status(404).json({ message: "Curso no encontrado", numero: 13 })
             } else {
-                res.status(500).json({ message: "No se pudo eliminar el curso", numero: 6 })
+                res.status(500).json({ message: "No se pudo eliminar el curso", numero: 14 })
             }
         }
     }
 
     async modificarCurso(req: Request, res: Response) {
         try {
-            const { anio, division, idTurno, idCurso } = req.body
+            const { anio, division, idTurno } = req.body
+            const { idCurso } = req.params
             const turno = await AppDataSource.getRepository(Turno).findOneByOrFail({ idTurno })
-            await AppDataSource.getRepository(Curso).update({ idCurso }, { anio, division, turno })
+            const curso = await AppDataSource.getRepository(Curso).findOneByOrFail({ idCurso: Number(idCurso) })
+            AppDataSource.getRepository(Curso).merge(curso, { anio, division, turno })
             res.status(204).send()
         } catch (error) {
             if (error.name === "EntityNotFoundError") {
-                res.status(404).json({ message: "Curso no encontrado", numero: 7 })
+                res.status(404).json({ message: "Curso no encontrado", numero: 15 })
             } else {
-                res.status(500).json({ message: "No se pudo modificar el curso", numero: 8 })
+                console.log(error)
+                res.status(500).json({ message: "No se pudo modificar el curso", numero: 16 })
             }
         }
     }
@@ -86,14 +92,28 @@ export class CursoController {
     async obtenerCurso(req: Request, res: Response) {
         try {
             const { search } = req.params
-            
-            const curso = await AppDataSource.getRepository(Curso).findOneByOrFail({ idCurso })
-            res.status(200).json(curso)
+            const cursoRepository = AppDataSource.getRepository(Curso)
+            let cursos: Curso[];
+            if (search.includes("-")) {
+                const searchList = search.split("-")
+                isNumber(searchList[0])
+                cursos = await cursoRepository.findBy([{ anio: Number(searchList[0]), division: searchList[1] }])
+            } else {
+                isNumber(search)
+                cursos = await cursoRepository.findBy([{ anio: Number(search) }])
+            }
+            if (cursos.length === 0) {
+                throw new EntityNotFoundError(Curso, null)
+            }
+            res.status(200).json(cursos)
         } catch (error) {
             if (error.name === "EntityNotFoundError") {
-                res.status(404).json({ message: "Curso no encontrado", numero: 7 })
+                res.status(404).json({ message: "Curso no encontrado", numero: 17 })
+            } else if (error.name === "TypeError") {
+                res.status(404).json({ message: "El año debe ser numerico", numero: 18 })
             } else {
-                res.status(500).json({ message: "No se pudo obtener el curso ", numero: 8 })
+                console.log(error)
+                res.status(500).json({ message: "No se pudo obtener el curso ", numero: 19 })
             }
         }
     }

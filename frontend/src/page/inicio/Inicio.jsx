@@ -19,8 +19,8 @@ export default function PaginaPrincipal() {
     const acitve = useSelector((state) => state.darkMode.active)
     const classModeDark = useSelector((state) => state.darkMode.class)
     const dispatch = useDispatch()
-    console.log(classModeDark);
-    console.log(acitve);
+    // console.log(classModeDark);
+    // console.log(acitve);
     
     const toggleClassDarkMode = () => {
         document.body.classList = ""

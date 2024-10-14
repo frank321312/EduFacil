@@ -1,12 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from './counterSlice'
-import authReducer from './authSlice'
-import darkModeReducer from './darkMode'
+import { configureStore } from '@reduxjs/toolkit';
+import darkModeReducer from './darkMode';
+import loginReducer from './loginSlice';
 
 export const store = configureStore({
     reducer: {
-        counter: counterReducer,
-        auth: authReducer,
-        darkMode: darkModeReducer
+        darkMode: darkModeReducer,
+        login: loginReducer
     },
 })

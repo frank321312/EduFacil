@@ -27,6 +27,52 @@ export async function insertEscuela() {
         codigo: "ESC01",
         imgUrl: "https://example.com/img/escuela1.jpg"
     })
+
+    await insertarEscuela({
+        nombre: "Escuela Secundaria Rivadavia",
+        email: "contacto@rivadavia.edu.ar",
+        direccion: "Calle Mitre 789, Rosario",
+        telefono: "+54 341 2345-6789",
+        codigo: "ESC04",
+        imgUrl: "https://example.com/img/escuela4.jpg"
+    })
+    
+    await insertarEscuela({
+        nombre: "Instituto Superior San Carlos",
+        email: "admin@sancarlos.edu.ar",
+        direccion: "Av. San Martín 567, Tucumán",
+        telefono: "+54 381 9876-5432",
+        codigo: "ESC05",
+        imgUrl: "https://example.com/img/escuela5.jpg"
+    })
+    
+    await insertarEscuela({
+        nombre: "Escuela Técnica Ingeniero White",
+        email: "info@ingwhite.edu.ar",
+        direccion: "Av. Alem 1024, Bahía Blanca",
+        telefono: "+54 291 4321-5678",
+        codigo: "ESC06",
+        imgUrl: "https://example.com/img/escuela6.jpg"
+    })
+    
+    await insertarEscuela({
+        nombre: "Escuela Normal Sarmiento",
+        email: "admin@sarmiento.edu.ar",
+        direccion: "Calle San Juan 345, La Plata",
+        telefono: "+54 221 7654-3210",
+        codigo: "ESC07",
+        imgUrl: "https://example.com/img/escuela7.jpg"
+    })
+    
+    await insertarEscuela({
+        nombre: "Colegio Nuestra Señora de Luján",
+        email: "info@lujan.edu.ar",
+        direccion: "Calle Alvear 789, San Juan",
+        telefono: "+54 264 8765-4321",
+        codigo: "ESC08",
+        imgUrl: "https://example.com/img/escuela8.jpg"
+    })
+    
 }
 
 export async function insertEscuelaNV() {

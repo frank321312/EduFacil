@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { Rol } from "./Rol.js";
 import { Escuela } from "./Escuela.js";
 
@@ -23,19 +23,16 @@ export class Usuario {
     email: string
 
     @Column()
-    bloqueado: boolean
-
-    @Column()
     habilitado: boolean
 
     @Column("datetime")
     fechaIngreso: Date
     
-    @Column("datetime", { nullable: true })
-    fechaEgreso: Date
+    @DeleteDateColumn()
+    deletedAt: Date | null;
 
     @Column("varchar", { length: 5 })
-    codigo: string
+    codigo: string | null
 
     @ManyToOne(() => Rol, (r) => r.usuarios)
     @JoinColumn({ name: "idRol" })

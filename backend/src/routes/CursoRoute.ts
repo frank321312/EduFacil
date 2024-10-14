@@ -9,6 +9,6 @@ const cursoController = new CursoController()
 //     next()
 // })
 router.get("/obtenercursos", cursoController.obtenerCursos)
-router.get("/obtenetcurso/:idCurso", cursoController.crearCurso)
+router.get("/obtenercurso/:search", cursoController.obtenerCurso)
 router.post("/crearcurso", cursoController.crearCurso)
 export default router
