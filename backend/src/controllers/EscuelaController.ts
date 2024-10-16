@@ -9,6 +9,8 @@ import { existeNombre } from '../validations/EscuelaValidation.js'
 import { generarNumeroCincoDigitos } from "../functions/UsuarioFunc.js"
 import { EscuelaNoValidada } from "../entity/EscuelaNoValidada.js"
 import { ValidationError } from "../errors/ValidationError.js"
+import { UsuarioNoValidado } from "../entity/UsuarioNoValidado.js"
+import { Rol } from "../entity/Rol.js"
 
 export class EscuelaController {
     async obtenerEscuelas(_req: Request, res: Response) {
@@ -88,9 +90,16 @@ export class EscuelaController {
 
     async crearEscuela(req: Request, res: Response) {
         try {
-            const { idEscuelaNV, codigoEscuela } = req.body
+            const { idEscuelaNV, codigoEscuela, idUsuarioNV, codigo, idRol } = req.body
             const escuelaNV = await AppDataSource.getRepository(EscuelaNoValidada).findOneByOrFail({ idEscuelaNV })
-            if (escuelaNV.codigo === codigoEscuela) {
+            const usuarionv = await AppDataSource.getRepository(UsuarioNoValidado).findOneByOrFail({ idUsuarioNV })
+            const rol = await AppDataSource.getRepository(Rol).findOneByOrFail({ idRol })
+            // console.log(req.body);
+            
+            if (rol.idRol !== 1) {
+                throw new ValidationError("No tiene permiso para crear una escuela", 50)
+            }
+            if (escuelaNV.codigo === codigoEscuela && usuarionv.codigo === codigo) {
                 const escuelaObj: EscuelaType = {
                     ...escuelaNV,
                     codigo: null
@@ -99,7 +108,7 @@ export class EscuelaController {
                 // await AppDataSource.getRepository(EscuelaNoValidada).delete(escuelaNV)
                 return res.json(escuela)
             } else {
-                throw new ValidationError("Codigo invalido", 46)
+                throw new ValidationError("Verifique el codigo de usuario o escuela", 46)
             }
         } catch (error) {
             if (error.name === "ValidationError") {

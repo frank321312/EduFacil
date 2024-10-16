@@ -17,24 +17,62 @@ export default function AuthCodigo() {
     const [user, setUser] = useState({
         idRol: null,
         idUsuarionv: null,
-        emaill: "",
+        email: "",
         nombreUsuario: "",
         idEscuelaNV: 0,
         idEscuela: 0
     })
+    
     useEffect(() => {
-        if (user.idRol == null) {
-            console.log(location.state)
+        if (location.state.idRol == null) {
+            // console.log(location.state)
             navigate("/autenticacion/opcion")
         } else {
             setUser({ ...location.state })
         }
     }, [])
-    console.log(user)
+    // console.log(user)
     const handleSendRegister = async (e) => {
         try {
             e.preventDefault()
-            const response = await axios.post("http://localhost:6008/api/")
+            if (user.idRol == 1) {
+                const dataSchool = {
+                    idEscuelaNV: user.idEscuelaNV, 
+                    codigoEscuela: codigoEscuelaRef.current.value == null ? "" : codigoEscuelaRef.current.value, 
+                    idUsuarioNV: user.idUsuarionv,
+                    codigo: codigoRef.current.value,
+                    idRol: user.idRol
+                }
+                console.log(dataSchool);
+                
+                const responseSchool = await axios.post("http://localhost:6008/api/escuela", dataSchool)
+            } else if (user.idRol == 3) {
+                const data = {
+                    codigo: codigoRef.current.value, 
+                    codigoEscuela: codigoEscuelaRef.current.value, 
+                    idUsuarioNV: user.idUsuarionv, 
+                    usuario: {
+                        nombreUsuario: user.nombreUsuario,
+                        email: user.email
+                    },
+                    idEscuela: user.idEscuela,
+                    idEscuelaNV: 0
+                }
+                const response = await axios.post("http://localhost:6008/api/usuario", data)
+            } else {
+                const data = {
+                    codigo: codigoRef.current.value, 
+                    codigoEscuela: "", 
+                    idUsuarioNV: user.idUsuarionv, 
+                    usuario: {
+                        nombreUsuario: user.nombreUsuario,
+                        email: user.email
+                    },
+                    idEscuela: user.idEscuela,
+                    idEscuelaNV: 0
+                }
+                const response = await axios.post("http://localhost:6008/api/usuario", data)
+            }
 
         } catch (error) {
             console.log(error)
@@ -50,21 +88,21 @@ export default function AuthCodigo() {
             {
                 user.idRol === 2 ?
                     <>
-                        <p>Se ha enviado un codigo a {user.emaill}</p>
+                        <p>Se ha enviado un codigo a {user.email}</p>
                         <ColForm>
-                            <Form.Label>Codigo del usuario</Form.Label>
-                            <Form.Control type="number" ref={codigoRef} />
+                            <Form.Label htmlFor="codigo">Codigo del usuario</Form.Label>
+                            <Form.Control id="codigo" type="number" ref={codigoRef} />
                         </ColForm>
                     </>
                     :
                     <>
                         <ColForm>
-                            <Form.Label>Codigo de la escuela</Form.Label>
-                            <Form.Control type="number" ref={codigoEscuelaRef} />
+                            <Form.Label htmlFor="codigo">Codigo de la escuela</Form.Label>
+                            <Form.Control type="number" id="codigo" ref={codigoEscuelaRef} />
                         </ColForm>
                         <ColForm>
-                            <Form.Label>Codigo del usuario</Form.Label>
-                            <Form.Control type="number" ref={codigoRef} />
+                            <Form.Label htmlFor="codigo-school">Codigo del usuario</Form.Label>
+                            <Form.Control type="number" id="codigo-school" ref={codigoRef} />
                         </ColForm>
                     </>
             }

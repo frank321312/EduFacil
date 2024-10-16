@@ -47,7 +47,7 @@ export class UsuarioController {
                 // Usar nodemailer para enviar el codigo a la escuela, al daministrador fuera del if
                 const escuela = await AppDataSource.getRepository(EscuelaNoValidada).findOneByOrFail({ idEscuelaNV: idEscuela })
             }
-            // Usar nodemailer para enviar el codigo de validacion al usuario
+            // Usar nodemailer para enviar el codigo de validacion al usuario sin importar su rol
             const codigoValidacion = generarNumeroCincoDigitos()
             const userType: UsuarioType = { ...req.body, codigo: codigoValidacion }
             const idUsuarioNV = await insertarUsuarioNV(userType, idRol, idEscuela)
@@ -94,7 +94,7 @@ export class UsuarioController {
                     await AppDataSource.getRepository(EscuelaNoValidada).delete(escuelaNV)
                     return res.status(200).json(token)
                 } else {
-                    throw new ValidationError("Codigo invalido", 28)
+                    throw new ValidationError("Verifique el codigo de usuario o escuela", 28)
                 }
             } else {
                 const escuela = await obtenerEscuela(idEscuela)
