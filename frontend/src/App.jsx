@@ -39,6 +39,7 @@ function App() {
         <Route path="/autenticacion/escuela" element={<RegistroEscuela />} />
         <Route path="/autenticacion/registro" element={<Registro />} />
         <Route path="/autenticacion/opcion" element={<ElegirOpcion />} />
+        <Route path="/escuelas" element={<AuthCodigo />} />
         <Route path="/autenticacion/codigo" element={<AuthCodigo />} />
         <Route path="/home" element={<Home />} />
         <Route path="/" element={<PaginaPrincipal />} />

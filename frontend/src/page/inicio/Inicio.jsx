@@ -8,50 +8,30 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 import { IoLogoLinkedin } from "react-icons/io";
 import { AiFillCodeSandboxSquare } from "react-icons/ai";
 import { Link, useNavigate } from 'react-router-dom';
-import { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { activeModeDark, deactivateModeDark } from '../../redux/darkMode';
+import NavInicio from '../../components/NavInicio';
 
 export default function PaginaPrincipal() {
     const navigate = useNavigate()
-    const navBarRef = useRef(null)
-    // const [active, setActive] = useState(false);
-    const acitve = useSelector((state) => state.darkMode.active)
-    const classModeDark = useSelector((state) => state.darkMode.class)
-    const dispatch = useDispatch()
-    // console.log(classModeDark);
-    // console.log(acitve);
-    
-    const toggleClassDarkMode = () => {
-        document.body.classList = ""
-        if (!acitve) {
-            dispatch(activeModeDark())
-            document.body.classList.add(classModeDark)
-        } else {
-            dispatch(deactivateModeDark())
-            document.body.classList.add(classModeDark)
-        }
-    }
 
     return (
         <>
-            <header>
-                <Navbar expand="lg" className="shadow-sm bg-white nav-dark-mode" ref={navBarRef} fixed='top'>
-                    <Container fluid className='justify-between'>
-                        <Navbar.Brand href="#" className='nav-logo pl-6'>EduFacil</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        <Navbar.Collapse id="basic-navbar-nav" className='justify-end pr-6'>
-                            <Nav className="gap-4 cotenedor-link">
-                                <Nav.Link as={Link} to="/autenticacion/opcion">Registrarse</Nav.Link>
-                                <Nav.Link as={Link} to="/autenticacion/iniciarsesion">Iniciar sesión</Nav.Link>
-                                <Nav.Item className='flex justify-center flex-col cursor-pointer'>
-                                    <FaMoon fontSize={20} onClick={toggleClassDarkMode} />
-                                </Nav.Item>
-                            </Nav>
-                        </Navbar.Collapse>
-                    </Container>
-                </Navbar>
-            </header>
+            {/* <div onClick={toggleClassDarkMode} className={`cursor-pointer fixed bottom-0 right-0 p-4 m-4 rounded-xl ${document.body.classList.contains("mode-dark") ? "bg-white text-dark" : "bg-dark text-white"}`}>
+                <FaMoon fontSize={20} />
+            </div>
+            <Navbar expand="lg" className="shadow-sm bg-white nav-dark-mode mode-dark-text-white" fixed='top'>
+                <Container fluid className='justify-between'>
+                    <Navbar.Brand href="#" className='nav-logo pl-6 mode-dark-text-white'>EduFacil</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" className='btnToggle' />
+                    <Navbar.Collapse id="basic-navbar-nav" className='justify-end pr-6'>
+                        <Nav className="gap-4 cotenedor-link">
+                            <Nav.Link as={Link} to="/autenticacion/escuelas" className='mode-dark-text-white'>Escuelas</Nav.Link>
+                            <Nav.Link as={Link} to="/autenticacion/opcion" className='mode-dark-text-white'>Registrarse</Nav.Link>
+                            <Nav.Link as={Link} to="/autenticacion/iniciarsesion" className='mode-dark-text-white'>Iniciar sesión</Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar> */}
+            <NavInicio />
             <Container fluid className='pt-52'>
                 <Row className='justify-center'>
                     <Col xxl={6} lg={8} sm={8} xs={9}>
@@ -127,8 +107,8 @@ export default function PaginaPrincipal() {
                         <div className='contenedor-pagina-oficial'>
                             <p className='mb-2'><b>Nuestra pagina oficial</b></p>
                             <div className='flex gap-3 cursor-pointer'>
-                                <AiFillCodeSandboxSquare color='black' fontSize={24} />
-                                <a href="https://google.com" target='_blank' style={{ textDecoration: "none", color: "#000" }}>TailBoos</a>
+                                <AiFillCodeSandboxSquare color='black' className='mode-dark-text-white' fontSize={24} />
+                                <a href="https://google.com" target='_blank' className='mode-dark-text-white' style={{ textDecoration: "none", color: "#000" }}>TailBoos</a>
                             </div>
                         </div>
                     </Col>

@@ -21,8 +21,16 @@
     box-shadow: 5px 5px 18px #000 !important;
 } */
 
-.mode-dark * {
+.mode-dark {
     background-color: #343a40 !important;
+    color: #fff !important;
+}
+
+.mode-dark .btnToggle {
+    background-color: #fff !important;
+}
+
+.mode-dark .mode-dark-text-white {
     color: #fff !important;
 }
 
@@ -46,6 +54,15 @@
 
 .mode-dark .btn-dark-mode:hover {
     background-color: #0b5ed7 !important;
+}
+
+.mode-dark .div-dark-mode {
+    background-color: #fff !important;
+}
+
+.mode-dark .form-mode-dark {
+    background-color: #fff !important;
+    color: #000 !important;
 }
 
 @media (max-width: 640px) {
