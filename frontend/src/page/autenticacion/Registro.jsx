@@ -39,6 +39,7 @@ export default function Registro() {
             console.log(error);
         }
     }
+    console.log(idRol.idRol)
 
     const handleSendRegister = async (e) => {
         try {
@@ -57,15 +58,15 @@ export default function Registro() {
             // console.log(response)
             setErrorMessage("")
             setErrorNumber(0)
-            navigate("/autenticacion/codigo", { 
-                state: { 
+            navigate("/autenticacion/codigo", {
+                state: {
                     idRol,
                     idUsuarionv: response.data.idUsuarionv,
-                    email: emailRef.current.value, 
+                    email: emailRef.current.value,
                     nombreUsuario: nombreUsuarioRef.current.value,
                     idEscuelaNV: idEscuelaNV == undefined ? 0 : idEscuelaNV,
                     idEscuela: id[0] == null ? 0 : id[0].idEscuela
-                } 
+                }
             })
         } catch (error) {
             console.log(error)
@@ -78,7 +79,7 @@ export default function Registro() {
     return (
         <>
             <LayoutAuth contenido={"Siguiente"} onNext={e => handleSendRegister(e)}>
-                <h2 className='text-center mb-4'>{ idRol === 1 ? "2. Ingrese sus datos" : "1. Ingrese sus datos" }</h2>
+                <h2 className='text-center mb-4'>{idRol === 1 ? "2. Ingrese sus datos" : "1. Ingrese sus datos"}</h2>
                 <ColForm>
                     <Form.Label htmlFor="nombre-usuario" >Nombre de usuario</Form.Label>
                     <Form.Control type="text" id="nombre-usuario" ref={nombreUsuarioRef} className={errorNumber === 21 || errorNumber === 29 ? "error-validation" : ""} />
@@ -86,22 +87,22 @@ export default function Registro() {
                 </ColForm>
                 <ColForm>
                     <Form.Label htmlFor="nombre">Nombre</Form.Label>
-                    <Form.Control type="text" id="nombre" ref={nombreRef} className={errorNumber === 22 ?"error-validation": ""} />
+                    <Form.Control type="text" id="nombre" ref={nombreRef} className={errorNumber === 22 ? "error-validation" : ""} />
                     {errorNumber === 22 && <span className="text-error">{errorMessage}</span>}
                 </ColForm>
                 <ColForm>
                     <Form.Label htmlFor="apellido">Apellido</Form.Label>
-                    <Form.Control type="text" id="apellido" ref={apellidoRef} className={errorNumber === 38 ? "error-validation":""} />
+                    <Form.Control type="text" id="apellido" ref={apellidoRef} className={errorNumber === 38 ? "error-validation" : ""} />
                     {errorNumber === 38 && <span className="text-error">{errorMessage}</span>}
                 </ColForm>
                 <ColForm>
                     <Form.Label htmlFor="email">Correo electronico</Form.Label>
-                    <Form.Control type="text" id="email" ref={emailRef} className={errorNumber === 23 || errorNumber === 28 ? "error-validation":""} />
-                    {errorNumber === 23 || errorNumber === 28 && <span className="text-error">{errorMessage}</span>}
+                    <Form.Control type="text" id="email" ref={emailRef} className={errorNumber === 23 || errorNumber === 28 ? "error-validation" : ""} />
+                    {errorNumber === 23 || errorNumber === 28 ? <span className="text-error">{errorMessage}</span> : ""}
                 </ColForm>
                 <ColForm>
                     <Form.Label htmlFor="pass">Contraseña</Form.Label>
-                    <Form.Control type="password" id="pass" ref={passwordRef} className={errorNumber === 24 ?"error-validation":""} />
+                    <Form.Control type="password" id="pass" ref={passwordRef} className={errorNumber === 24 ? "error-validation" : ""} />
                     {errorNumber === 24 && <span className="text-error">{errorMessage}</span>}
                 </ColForm>
                 {

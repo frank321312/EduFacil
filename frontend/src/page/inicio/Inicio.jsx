@@ -31,8 +31,8 @@ export default function PaginaPrincipal() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar> */}
-            <NavInicio />
-            <Container fluid className='pt-52'>
+            <NavInicio isSearch={false}/>
+            <Container fluid className='pt-48'>
                 <Row className='justify-center'>
                     <Col xxl={6} lg={8} sm={8} xs={9}>
                         <p className='text-2xl parrafo-repsonsive'>

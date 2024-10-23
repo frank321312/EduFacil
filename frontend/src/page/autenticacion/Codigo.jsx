@@ -50,7 +50,7 @@ export default function AuthCodigo() {
                 const data = {
                     codigo: codigoRef.current.value, 
                     codigoEscuela: codigoEscuelaRef.current.value, 
-                    idUsuarioNV: user.idUsuarionv, 
+                    idUsuarioNV: user.idUsuarionv,
                     usuario: {
                         nombreUsuario: user.nombreUsuario,
                         email: user.email
@@ -88,10 +88,11 @@ export default function AuthCodigo() {
             {
                 user.idRol === 2 ?
                     <>
-                        <p>Se ha enviado un codigo a {user.email}</p>
+                        <p>Se ha enviado un codigo a <b>{user.email}</b></p>
                         <ColForm>
                             <Form.Label htmlFor="codigo">Codigo del usuario</Form.Label>
-                            <Form.Control id="codigo" type="number" ref={codigoRef} />
+                            <Form.Control id="codigo" type="number" ref={codigoRef} className={errorNumber === 28 ? "error-validation" : ""}/>
+                            {errorNumber === 28 ? <span className="text-error">{errorMessage}</span> : ""}
                         </ColForm>
                     </>
                     :

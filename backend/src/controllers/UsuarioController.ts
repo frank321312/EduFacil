@@ -17,7 +17,11 @@ export class UsuarioController {
         try {
             const { nombreUsuario, nombre, apellido, email, password, idEscuela, idRol } = req.body
             console.log(req.body)
-            isNumber(idRol)
+            if (idRol.idRol !== undefined) {
+                isNumber(idRol.idRol)
+            } else {
+                isNumber(idRol)
+            }
             isNumber(idEscuela)
             validarNombreUsuario(nombreUsuario)
             validarNombre(nombre)

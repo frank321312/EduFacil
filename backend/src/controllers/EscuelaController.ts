@@ -127,9 +127,9 @@ export class EscuelaController {
             const nombre = req.query.nombre as string
             let escuelas: Escuela[];
             setTimeout(async () => {
-                escuelas = await AppDataSource.getRepository(Escuela).find({ where: { nombre: Like(`%${nombre}%`) }, select: ["nombre", "idEscuela"] })
+                escuelas = await AppDataSource.getRepository(Escuela).find({ where: { nombre: Like(`%${nombre}%`) }, select: selectData })
                 return res.json(escuelas)
-            }, 500)
+            }, 200)
             // const escuelas = await AppDataSource.getRepository(Escuela).find({ where: { nombre: Like(`%${nombre}%`) }, select: ["nombre", "idEscuela"] })
             // res.json(escuelas)
         } catch (error) {

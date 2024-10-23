@@ -31,7 +31,7 @@ export class Usuario {
     @DeleteDateColumn()
     deletedAt: Date | null;
 
-    @Column("varchar", { length: 5 })
+    @Column("varchar", { length: 5, nullable: true })
     codigo: string | null
 
     @ManyToOne(() => Rol, (r) => r.usuarios)

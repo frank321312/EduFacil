@@ -37,3 +37,6 @@ app.use("/api", escuelaRoutes)
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })
+
+const objeto = 1
+console.log(typeof objeto === "object")

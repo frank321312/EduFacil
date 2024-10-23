@@ -15,6 +15,7 @@ import Cookies from 'universal-cookie'
 import { autenticar } from './redux/loginSlice'
 import { decodeToken } from './functions/decodeToken'
 import AuthCodigo from './page/autenticacion/Codigo'
+import Escuelas from './page/inicio/Escuelas'
 
 function App() {
   const data = useSelector(state => state.login)
@@ -39,8 +40,8 @@ function App() {
         <Route path="/autenticacion/escuela" element={<RegistroEscuela />} />
         <Route path="/autenticacion/registro" element={<Registro />} />
         <Route path="/autenticacion/opcion" element={<ElegirOpcion />} />
-        <Route path="/escuelas" element={<AuthCodigo />} />
         <Route path="/autenticacion/codigo" element={<AuthCodigo />} />
+        <Route path="/escuelas" element={<Escuelas />} />
         <Route path="/home" element={<Home />} />
         <Route path="/" element={<PaginaPrincipal />} />
         <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />

@@ -1,0 +1,17 @@
+@media (min-width: 350px) {
+    .side-bar {
+        width: 230px !important;
+    }
+}
+
+@media (min-width: 350px) {
+    .side-bar {
+        width: 270px !important;
+    }
+}
+
+@media (min-width: 450px) {
+    .side-bar {
+        width: 350px !important;
+    }
+}

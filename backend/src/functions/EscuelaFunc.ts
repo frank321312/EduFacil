@@ -40,4 +40,4 @@ export const obtenerEscuelasNV = async () => await AppDataSource.getRepository(E
 export const obtenerEscuelas = async () => await AppDataSource.getRepository(Escuela).find()
 export const obtenerEscuela = async (idEscuela: number) => await AppDataSource.getRepository(Escuela).findOneByOrFail({ idEscuela })
 
-export const selectData: FindOptionsSelect<Escuela> | FindOptionsSelectByString<Escuela> = ["nombre", "direccion", "email", "idEscuela", "imgUrl"]
+export const selectData: FindOptionsSelect<Escuela> | FindOptionsSelectByString<Escuela> = ["nombre", "direccion", "email", "idEscuela", "imgUrl", "telefono"]
