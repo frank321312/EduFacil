@@ -3,19 +3,25 @@ import NavInicio from "../../components/NavInicio";
 import axios from "axios";
 import { Col, Row } from "react-bootstrap";
 import EscuelasList from "../../components/EscuelaList";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 export default function Escuelas() {
     const [escuelas, setEscuelas] = useState([])
-    const [listSchoolSearch, setListSchoolSearch] = useState([])
     const location = useLocation()
+    const [searchParams] = useSearchParams()
 
     useEffect(() => {
-        axios.get("http://localhost:6008/api/obtenerescuelas").then(
-            res => { setEscuelas(res.data); console.log(escuelas) }
-        ).catch(err => console.log(err))
-
-    }, [listSchoolSearch])
+        const busqueda = searchParams.get("busqueda")
+        if (busqueda != null) {
+            axios.get(`http://localhost:6008/api/escuela?nombre=${busqueda}`).then(
+                res => { setEscuelas(res.data);}
+            ).catch(err => console.log(err))
+        } else {
+            axios.get("http://localhost:6008/api/obtenerescuelas").then(
+                res => { setEscuelas(res.data); }
+            ).catch(err => console.log(err))
+        }
+    }, [])
 
     return (
         <>

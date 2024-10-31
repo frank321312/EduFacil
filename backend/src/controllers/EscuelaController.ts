@@ -125,13 +125,8 @@ export class EscuelaController {
     async obtenerEscuelaPorNombre(req: Request, res: Response) {
         try {
             const nombre = req.query.nombre as string
-            let escuelas: Escuela[];
-            setTimeout(async () => {
-                escuelas = await AppDataSource.getRepository(Escuela).find({ where: { nombre: Like(`%${nombre}%`) }, select: selectData })
-                return res.json(escuelas)
-            }, 200)
-            // const escuelas = await AppDataSource.getRepository(Escuela).find({ where: { nombre: Like(`%${nombre}%`) }, select: ["nombre", "idEscuela"] })
-            // res.json(escuelas)
+            const escuelas = await AppDataSource.getRepository(Escuela).find({ where: { nombre: Like(`%${nombre}%`) }, select: selectData })
+            res.json(escuelas)
         } catch (error) {
             console.log(error)
             res.status(500).json({ message: "No se pudo obtener la escuela", numero: 49 })

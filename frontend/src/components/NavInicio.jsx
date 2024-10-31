@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { activeModeDark, deactivateModeDark } from '../redux/darkMode';
 import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
 import { FaMoon } from "react-icons/fa";
-import Container from 'react-bootstrap/Container';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { IoMenu } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5"; import SideBar from './SideBar';
-import "./styles/navBar.css"
+import "./styles/navBar.css";
 import axios from 'axios';
 
 export default function NavInicio({ isSearch }) {
@@ -25,8 +23,9 @@ export default function NavInicio({ isSearch }) {
 
     useEffect(() => {
         document.body.style.paddingTop = "55px"
+        document.body.style.paddingBottom = "80px"
         const handleResize = () => {
-            setWindowWidth(window.innerWidth);
+            setWindowWidth(window.innerWidth)
         };
         window.addEventListener('resize', handleResize)
         
@@ -35,7 +34,8 @@ export default function NavInicio({ isSearch }) {
         return () => {
             window.removeEventListener('resize', handleResize)
             document.body.style.paddingTop = "0"
-        };
+            document.body.style.paddingBottom = "0"
+        }
     }, [])
 
     const toggleClassDarkMode = () => {
@@ -51,7 +51,6 @@ export default function NavInicio({ isSearch }) {
 
     const handleSearchEscuela = async (e) => {
         try {
-            // console.log(e.target.value)
             setBuscarEscuela(e.target.value)
             const response = await axios.get(`http://localhost:6008/api/escuela?nombre=${buscarEscuela}`)
             setListSearchSchool(response.data)

@@ -6,7 +6,7 @@ const escuelaController = new EscuelaController()
 
 router.get("/obtenerescuelas", escuelaController.obtenerEscuelas)
 router.get("/escuela/:search", escuelaController.obtenerEscuela)
-router.get("/escuela", escuelaController.obtenerEscuelaPorNombre.bind(escuelaController))
+router.get("/escuela", escuelaController.obtenerEscuelaPorNombre)
 
 router.post("/escuelanv", escuelaController.crearEscuelaNV)
 router.post("/escuela", escuelaController.crearEscuela.bind(escuelaController))

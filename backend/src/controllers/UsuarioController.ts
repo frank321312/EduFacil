@@ -16,8 +16,9 @@ export class UsuarioController {
     async crearUsuarioNV(req: Request, res: Response) {
         try {
             const { nombreUsuario, nombre, apellido, email, password, idEscuela, idRol } = req.body
+            // console.log(req.body)
             console.log(req.body)
-            if (idRol.idRol !== undefined) {
+            if (typeof idRol === "object") {
                 isNumber(idRol.idRol)
             } else {
                 isNumber(idRol)
@@ -105,12 +106,12 @@ export class UsuarioController {
                 if (user.codigo === codigo) {
                     const userType: UsuarioType = { ...user, codigo: null }
                     const usuarioAuthLogin = await insertarUsuario(userType, rol, escuela)
-                    await AppDataSource.getRepository(UsuarioNoValidado).delete(user)
+                    // await AppDataSource.getRepository(UsuarioNoValidado).delete(user)
                     const token = jwt.sign({ ...usuarioAuthLogin }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 30 })
                     res.status(200).json(token)
                 } else {
                     throw new ValidationError("Codigo invalido", 28)
-                }    
+                }
             }
         } catch (error) {
             if (error.name === "ValidationError") {

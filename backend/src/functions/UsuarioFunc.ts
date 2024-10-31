@@ -43,11 +43,7 @@ export const insertarUsuario = async (usuario: UsuarioType, rol: Rol, escuela: E
 }
 
 export const obtenerDatoUsuarioAuth = async (id: number) => {
-    // const { idUsuario, nombreUsuario } = await AppDataSource.getRepository(Usuario).findOne({ where: { idUsuario: id }, relations: ["escuela"] })
-
-    // return { idUsuario, nombreUsuario }
     const user = await AppDataSource.getRepository(Usuario).findOneOrFail({ where: { idUsuario: id }, relations: { escuela: true, rol: true }, select: { escuela: { idEscuela: true }, idUsuario: true, nombreUsuario: true, rol: { idRol: true } } })
-
     return user
 }
 

@@ -13,8 +13,8 @@ const loginSlice = createSlice({
     reducers: {
         autenticar: (state, action) => {
             state.nombreUsuario = action.payload.nombre,
-                state.idEscuela = action.payload.idEscuela,
-                state.idRol = action.payload.idRol
+            state.idEscuela = action.payload.idEscuela,
+            state.idRol = action.payload.idRol
             state.idUsuario = action.payload.idUsuario
         }
     }

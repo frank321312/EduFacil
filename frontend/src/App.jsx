@@ -16,6 +16,7 @@ import { autenticar } from './redux/loginSlice'
 import { decodeToken } from './functions/decodeToken'
 import AuthCodigo from './page/autenticacion/Codigo'
 import Escuelas from './page/inicio/Escuelas'
+import Cursos from './page/inicio/Cursos'
 
 function App() {
   const data = useSelector(state => state.login)
@@ -24,8 +25,11 @@ function App() {
 
   useEffect(() => {
     const token = cookies.get("jwt")
+    console.log("sappe", token)
+    
     if (token !== undefined) {
-      dispatch(autenticar(decodeToken(token)))
+      const usuario = decodeToken(token)
+      dispatch(autenticar(usuario))
     }
   }, [])
 
@@ -37,17 +41,26 @@ function App() {
           <Route path="/autenticacion/escuela" element={<RegistroEscuela />} />
           <Route path="/autenticacion/registro" element={<Registro />} />
         </Route> */}
+
+        {/* Rutas para autenticacion de usuario */}
         <Route path="/autenticacion/escuela" element={<RegistroEscuela />} />
-        <Route path="/autenticacion/registro" element={<Registro />} />
         <Route path="/autenticacion/opcion" element={<ElegirOpcion />} />
+        <Route path="/autenticacion/registro" element={<Registro />} />
         <Route path="/autenticacion/codigo" element={<AuthCodigo />} />
+        <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />
+
+        {/* Rutas que pueden ser accedidas por cualquier usuario */}
         <Route path="/escuelas" element={<Escuelas />} />
+        <Route path="/escuela/cursos" element={<Cursos />} />
+        <Route path="/escuela/cursos/:idEscuela/:curso" element={<Cursos />} />
         <Route path="/home" element={<Home />} />
         <Route path="/" element={<PaginaPrincipal />} />
-        <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />
+
         {/* <Route element={<ProtectedRoute isAllowed={count === 0 ? false : true}/>}>
           <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />
         </Route> */}
+        {/* Ruta no encontrada */}
+        <Route path='*' element={<h1>ruta</h1>} />
       </Routes>
     </Router>
   )

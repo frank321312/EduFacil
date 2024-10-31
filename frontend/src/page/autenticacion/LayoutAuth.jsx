@@ -2,6 +2,7 @@ import ColForm from "../../components/ColForm";
 import { Button, Container, Row } from "react-bootstrap";
 import Form from 'react-bootstrap/Form';
 import './auth.css';
+import { Outlet } from "react-router-dom";
 
 export default function LayoutAuth({ children, contenido, onNext }) {
     return (

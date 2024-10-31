@@ -6,11 +6,13 @@ import { obtenerEscuela } from "../functions/EscuelaFunc.js";
 import { Turno } from "../entity/Turno.js";
 import { EntityNotFoundError } from "typeorm";
 import { isNumber } from "../validations/CursoValidation.js";
+import { obtenerCursoPorAnio, obtenerCursoPorAnioDivison, selectDataCurso } from "../functions/CursoFunc.js";
 
 export class CursoController {
-    async obtenerCursos(_req: Request, res: Response) {
+    async obtenerCursos(req: Request, res: Response) {
         try {
-            const cursos = await AppDataSource.getRepository(Curso).find()
+            const { idEscuela } = req.params
+            const cursos = await selectDataCurso(idEscuela)
             res.status(200).json(cursos)
         } catch (error) {
             console.log(error)
@@ -91,16 +93,21 @@ export class CursoController {
 
     async obtenerCurso(req: Request, res: Response) {
         try {
-            const { search } = req.params
-            const cursoRepository = AppDataSource.getRepository(Curso)
-            let cursos: Curso[];
-            if (search.includes("-")) {
+            const { idEscuela, search } = req.params
+            console.log(req.params)
+            let cursos: Curso[]
+            let tieneDvision = false
+            if (search.indexOf("-") != -1) {
+                if (search[search.indexOf("-") + 1] != undefined) tieneDvision = true 
+            }
+            if (tieneDvision) {
                 const searchList = search.split("-")
                 isNumber(searchList[0])
-                cursos = await cursoRepository.findBy([{ anio: Number(searchList[0]), division: searchList[1] }])
+                cursos = await obtenerCursoPorAnioDivison(idEscuela, Number(searchList[0]), searchList[1])
             } else {
-                isNumber(search)
-                cursos = await cursoRepository.findBy([{ anio: Number(search) }])
+                const searchList = search.split("-")
+                isNumber(searchList[0])
+                cursos = await obtenerCursoPorAnio(idEscuela, Number(searchList[0]))
             }
             if (cursos.length === 0) {
                 throw new EntityNotFoundError(Curso, null)

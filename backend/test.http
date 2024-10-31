@@ -1,10 +1,10 @@
 @Api_HostAddress = http://localhost:6008
 
-### Obtener todos los cursos
-GET {{Api_HostAddress}}/api/obtenercursos
+### Obtener todos los cursos de una escuela
+GET {{Api_HostAddress}}/api/obtenercursos/1
 
 ### Obtener curso por año o division o todo junto
-GET {{Api_HostAddress}}/api/obtenercurso/1-7
+GET {{Api_HostAddress}}/api/obtenercurso/1/6-7
 
 ### Crear curso
 POST {{Api_HostAddress}}/api/crearcurso
@@ -35,3 +35,15 @@ GET {{Api_HostAddress}}/api/escuela/martin
 
 ### Obtener todos los usuarios
 GET {{Api_HostAddress}}/api/obtenerusuarios?id=1
+
+POST {{Api_HostAddress}}/api/usuarionv
+Content-Type: application/json
+{
+    "nombreUsuario": "Alguien",
+    "nombre": "Carlos",
+    "apellido": "Mendoza",
+    "email": "carlosmendoza@gmail.com",
+    "password": "contraseAÑ42",
+    "idRol": 2,
+    "idEscuela": 1
+}
