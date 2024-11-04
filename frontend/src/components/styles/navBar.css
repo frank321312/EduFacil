@@ -1,0 +1,11 @@
+.animation-link {
+    transition-duration: .5s;
+}
+
+.animation-link:hover {
+    background-color: #e9ecf0;
+}
+
+.mode-dark .animation-link:hover {
+    background-color: #161b24;
+}

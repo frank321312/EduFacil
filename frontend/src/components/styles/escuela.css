@@ -27,6 +27,10 @@
     background-color: #e9ecf0;
 }
 
+.mode-dark .curso-info:hover {
+    background-color: #161b24;
+}   
+
 @media (max-width: 600px) {
     .col-responsive {
         margin-left: 70px;
@@ -36,6 +40,12 @@
 @media (max-width: 522px) {
     .col-responsive {
         margin-left: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .col-responsive {
+        margin-left: 40px;
     }
 }
 

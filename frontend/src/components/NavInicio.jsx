@@ -171,12 +171,11 @@ export default function NavInicio({ isSearch }) {
                             </div>
                             :
                             <>
-                                <Nav.Link className="mb-4" style={{ fontSize: "16px" }} as={Link} to="/autenticacion/opcion">Registrarse</Nav.Link>
-                                <Nav.Link className="mb-4" style={{ fontSize: "16px" }} as={Link} to="/autenticacion/iniciarsesion">Iniciar sesion</Nav.Link>
+                                <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/autenticacion/opcion">Registrarse</Nav.Link>
+                                <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/autenticacion/iniciarsesion">Iniciar sesion</Nav.Link>
                             </>
-
                     }
-                    <Nav.Link className="mb-4" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link>
+                    <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link>
                 </SideBar>
             }
         </>

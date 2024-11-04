@@ -37,13 +37,15 @@ export default function Home() {
     return (
         <>
             <NavInicio isSearch={false} />
-            <InfoEscuela escuela={escuela} />
-            <Container className="container-responsive mt-10">
-                <h1>Cursos</h1>
-                <Container fluid className="border rounded-lg">
-                    <InfoCurso cursos={cursos} />
+            <div className="opcion-animation">
+                <InfoEscuela escuela={escuela} />
+                <Container className="container-responsive mt-10">
+                    <h1>Cursos</h1>
+                    <Container fluid className="border rounded-lg">
+                        <InfoCurso cursos={cursos} />
+                    </Container>
                 </Container>
-            </Container>
+            </div>
         </>
     )
 }
