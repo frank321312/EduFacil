@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     nombreUsuario: "",
-    idEscuela: 2,
+    idEscuela: 0,
     idRol: 0,
     idUsuario: 0
 }
@@ -11,7 +11,7 @@ const loginSlice = createSlice({
     name: "login",
     initialState,
     reducers: {
-        autenticar: (state, action) => {
+        autenticar: (state, action) => {            
             state.nombreUsuario = action.payload.nombre,
             state.idEscuela = action.payload.idEscuela,
             state.idRol = action.payload.idRol

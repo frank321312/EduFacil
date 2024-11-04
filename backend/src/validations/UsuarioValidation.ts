@@ -76,10 +76,10 @@ export const validarCorreo = (email: string) => {
         throw new ValidationError("No debe contener espacios", 23)
     } else if (/@/.test(email) == false) {
         throw new ValidationError("El email no contiene '@'", 23)
-    } else if (emailMatchBefore[0].length < 6 || emailMatchAfter[0].length < 6) {
-        throw new ValidationError("Email invalido", 23)
+    } else if (emailMatchBefore[0].length < 3 || emailMatchAfter[0].length < 3) {
+        throw new ValidationError("Email invalido a", 23)
     } else if (emailMatchAfter[0].indexOf(".") == -1) {
-        throw new ValidationError("Email invalido", 23)
+        throw new ValidationError("Email invalido b", 23)
     }
 }
 

@@ -14,7 +14,7 @@ export default defineConfig({
           } catch (error) {
             console.error("Error: URL malformada detectada:", req.url);
             res.statusCode = 400;
-            res.writeHead(302, { Location: '/' });
+            res.writeHead(302, { Location: '/url-invalido' });
             res.end()
           }
         });

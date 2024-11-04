@@ -5,10 +5,11 @@ import EscuelaData from "./EscuelaData";
 
 export default function EscuelasList({ listSchool }) {
     const navigate = useNavigate()
-    console.log(listSchool)
+
     const handleViewSchool = (escuela) => {
         navigate("/escuela/cursos", { state: escuela })
     }
+    
     return (
         <>
             {

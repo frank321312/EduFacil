@@ -11,7 +11,7 @@ export default function LayoutAuth({ children, contenido, onNext }) {
                 <Row className="justify-center">
                     { children }
                     <ColForm>
-                        <Button color="primary" className="w-full mt-2 btn-dark-mode" onClick={onNext}>{ contenido }</Button>
+                        <Button type="submit" color="primary" className="w-full mt-2 btn-dark-mode" onClick={onNext}>{ contenido }</Button>
                     </ColForm>
                 </Row>
             </Form>

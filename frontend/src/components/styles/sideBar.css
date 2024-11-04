@@ -1,3 +1,35 @@
+.animacion-side-bar-inicio {
+    animation-name: desplazarInicio;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+}
+
+.animacion-side-bar-fin {
+    animation-name: desplazarFin;
+    animation-duration: .5s;
+    /* animation-fill-mode: forwards; */
+}
+
+@keyframes desplazarInicio {
+    from {
+        left: -300px;
+    }
+
+    to {
+        left: 0px;
+    }
+}
+
+@keyframes desplazarFin {
+    from {
+        left: 0px;
+    }
+
+    to {
+        left: -400px;
+    }
+}
+
 @media (min-width: 350px) {
     .side-bar {
         width: 230px !important;

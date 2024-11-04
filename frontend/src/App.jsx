@@ -17,6 +17,10 @@ import { decodeToken } from './functions/decodeToken'
 import AuthCodigo from './page/autenticacion/Codigo'
 import Escuelas from './page/inicio/Escuelas'
 import Cursos from './page/inicio/Cursos'
+import URLInvalido from './components/URLInvalido'
+import OlvideContrasenaEmail from './page/autenticacion/OlvideContraseñaEmail'
+import OlvideContrasenaCodigo from './page/autenticacion/OlvideContraseñaCodigo'
+import OlvideContrasena from './page/autenticacion/OlvideContrasenaPass'
 
 function App() {
   const data = useSelector(state => state.login)
@@ -25,7 +29,6 @@ function App() {
 
   useEffect(() => {
     const token = cookies.get("jwt")
-    console.log("sappe", token)
     
     if (token !== undefined) {
       const usuario = decodeToken(token)
@@ -48,6 +51,9 @@ function App() {
         <Route path="/autenticacion/registro" element={<Registro />} />
         <Route path="/autenticacion/codigo" element={<AuthCodigo />} />
         <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />
+        <Route path="/autenticacion/olvidecontraseña/email" element={<OlvideContrasenaEmail />} />
+        <Route path="/autenticacion/olvidecontraseña/codigo" element={<OlvideContrasenaCodigo />} />
+        <Route path="/autenticacion/olvidecontraseña/contrasena" element={<OlvideContrasena />} />
 
         {/* Rutas que pueden ser accedidas por cualquier usuario */}
         <Route path="/escuelas" element={<Escuelas />} />
@@ -61,6 +67,7 @@ function App() {
         </Route> */}
         {/* Ruta no encontrada */}
         <Route path='*' element={<h1>ruta</h1>} />
+        <Route path='/url-invalido' element={<URLInvalido />} />
       </Routes>
     </Router>
   )

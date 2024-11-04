@@ -20,7 +20,7 @@ export class Escuela {
     @Column("varchar", { length: 20 })
     telefono: string;
 
-    @Column("varchar", { length: 5 })
+    @Column("varchar", { length: 5, nullable: true })
     codigo: string | null;
 
     @Column("varchar", { length: 255, nullable: true })

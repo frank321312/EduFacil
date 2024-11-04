@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { existeNombre, existeEmail, validarApellido, validarCorreo, validarNombre, validarNombreUsuario, validarPassowrd } from "../validations/UsuarioValidation.js";
 import { obtenerEscuela } from "../functions/EscuelaFunc.js";
 import { AppDataSource } from "../data-source.js";
@@ -75,6 +75,7 @@ export class UsuarioController {
     async crearUsuario(req: Request, res: Response) {
         try {
             const { codigo, codigoEscuela, idUsuarioNV, usuario, idEscuela, idEscuelaNV } = req.body
+            // Verifico que el usuario exista, en caso contrario lanza una excepcion
             const user = await AppDataSource.getRepository(UsuarioNoValidado).findOneByOrFail({ idUsuarioNV, email: usuario.email, nombreUsuario: usuario.nombreUsuario })
             const rol = await AppDataSource.getRepository(Rol).findOneByOrFail({ idRol: user.idRol })
             if (rol.idRol === 3) {
@@ -95,8 +96,9 @@ export class UsuarioController {
                     const userType: UsuarioType = { ...user, codigo: null }
                     const usuarioAuthLogin = await insertarUsuario(userType, rol, escuela)
                     await AppDataSource.getRepository(UsuarioNoValidado).delete(user)
+                    // Si el registro fue exitoso, se crea un token para el usuario, expira en 30 minutos
                     const token = jwt.sign({ ...usuarioAuthLogin }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 30 })
-                    await AppDataSource.getRepository(EscuelaNoValidada).delete(escuelaNV)
+                    await AppDataSource.getRepository(EscuelaNoValidada).delete({ idEscuelaNV: escuelaNV.idEscuelaNV })
                     return res.status(200).json(token)
                 } else {
                     throw new ValidationError("Verifique el codigo de usuario o escuela", 28)
@@ -106,7 +108,7 @@ export class UsuarioController {
                 if (user.codigo === codigo) {
                     const userType: UsuarioType = { ...user, codigo: null }
                     const usuarioAuthLogin = await insertarUsuario(userType, rol, escuela)
-                    // await AppDataSource.getRepository(UsuarioNoValidado).delete(user)
+                    await AppDataSource.getRepository(UsuarioNoValidado).delete(user)
                     const token = jwt.sign({ ...usuarioAuthLogin }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 30 })
                     res.status(200).json(token)
                 } else {
@@ -131,8 +133,8 @@ export class UsuarioController {
             const userExists = await AppDataSource.getRepository(Usuario).findOneOrFail({ where: [{ email: emailUsername }, { nombreUsuario: emailUsername }] })
             if (userExists.password !== password) throw new ValidationError("Contraseña invalida", 31)
             const usuario = await obtenerDatoUsuarioAuth(userExists.idUsuario)
-            const token = jwt.sign({ ...usuario }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 30 })
-            res.status(200).json({ usuario, token })
+            const token = jwt.sign({ ...usuario }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 })
+            res.json(token)
         } catch (error) {
             if (error.name === "ValidationError") {
                 res.status(400).json({ message: error.message, numero: error.error })
@@ -192,6 +194,130 @@ export class UsuarioController {
             } else {
                 console.log(error)
                 res.status(500).json({ message: "No se pudieron obtener los usuarios", numero: 37 })
+            }
+        }
+    }
+
+    async olvideContraseñaEmail(req: Request, res: Response) {
+        try {
+            const { email } = req.body
+            validarCorreo(email)
+            const codigo = generarNumeroCincoDigitos()
+            const respositoryUsuario = AppDataSource.getRepository(Usuario)
+            const usuario = await respositoryUsuario.findOneByOrFail({ email })
+            respositoryUsuario.merge(usuario, { codigo: codigo.toString() })
+            await respositoryUsuario.save(usuario)
+
+            // Usar nodemailer para enviar en codigo de verificacion para el usuario
+
+            res.status(204).send()
+        } catch (error) {
+            if (error.name === "ValidationError") {
+                res.status(400).json({ message: error.message, numero: error.error })
+            } else if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "El usuario no existe", numero: 32 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "No se pudo mandar el email", numero: 37 })
+            }
+        }
+    }
+
+    async olvideContraseñaCodigo(req: Request, res: Response) {
+        try {
+            const { codigo, email } = req.body
+            const usuario = await AppDataSource.getRepository(Usuario).findOneByOrFail({ email })
+            if (usuario.codigo != codigo) {
+                throw new ValidationError("Codigo invalido", 67)
+            }
+            res.status(200).json(usuario.idUsuario)
+        } catch (error) {
+            if (error.name === "ValidationError") {
+                res.status(400).json({ message: error.message, numero: error.error })
+            } else if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "El usuario no existe", numero: 32 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "Error interno del servidor", numero: 37 })
+            }
+        }
+    }
+
+    async olvideContraseñaPassword(req: Request, res: Response) {
+        try {
+            const { idUsuario, password, codigo } = req.body
+            validarPassowrd(password)
+            const repositoryUsuario = AppDataSource.getRepository(Usuario)
+            const usuario = await repositoryUsuario.findOneByOrFail({ idUsuario })
+            if (usuario.codigo != codigo) {
+                throw new ValidationError("Codigo invalido", 67)
+            }
+            repositoryUsuario.merge(usuario, { password })
+            await repositoryUsuario.save(usuario);
+            res.status(204).send()
+        } catch (error) {
+            if (error.name === "ValidationError") {
+                res.status(400).json({ message: error.message, numero: error.error })
+            } else if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "El usuario no existe", numero: 32 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "Error interno del servidor", numero: 37 })
+            }
+        }
+    }
+
+    async reenviarCodigoEscuela(req: Request, res:Response) {
+        try {
+            const { idEscuelaNV } = req.body
+            const codigo = generarNumeroCincoDigitos()
+            const repositoryEscuelaNV = AppDataSource.getRepository(EscuelaNoValidada)
+            const escuelaNV = await repositoryEscuelaNV.findOneByOrFail({ idEscuelaNV })
+            repositoryEscuelaNV.merge(escuelaNV, { codigo: codigo.toString() })
+            await repositoryEscuelaNV.save(escuelaNV)
+
+            // Usar nodemailer para reenviar el codigo a la escuela
+
+            res.status(204).send()
+        } catch (error) {
+            if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "No se pudo reenviar el codigo", numero: 32 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "Error interno del servidor", numero: 37 })
+            }
+        }
+    }
+
+    async reenviarCodigoUsuario(req: Request, res: Response) {
+        try {
+            const { email, isUserNV } = req.body
+            console.log(req.body)
+            if (isUserNV == true) {
+                const repositoryUsuarioNV = AppDataSource.getRepository(UsuarioNoValidado)
+                const usuarioNV = await repositoryUsuarioNV.findOneByOrFail({ email })
+                const codigo = generarNumeroCincoDigitos()
+                repositoryUsuarioNV.merge(usuarioNV, { codigo: codigo.toString() })
+                await repositoryUsuarioNV.save(usuarioNV)
+                // Usar nodemailer para reenviar el codigo
+
+                return res.status(204).send()
+            } else {
+                const repositoryUsuario = AppDataSource.getRepository(Usuario)
+                const usuario = await repositoryUsuario.findOneByOrFail({ email })
+                const codigo = generarNumeroCincoDigitos()
+                repositoryUsuario.merge(usuario, { codigo: codigo.toString() })
+                await repositoryUsuario.save(usuario)
+                // Usar nodemailer para reenviar el codigo
+
+                return res.status(204).send()
+            }
+        } catch (error) {
+            if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "No se pudo reenviar el codigo", numero: 32 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "Error interno del servidor", numero: 37 })
             }
         }
     }

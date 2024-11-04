@@ -36,6 +36,17 @@ GET {{Api_HostAddress}}/api/escuela/martin
 ### Obtener todos los usuarios
 GET {{Api_HostAddress}}/api/obtenerusuarios?id=1
 
+### Crear una escuela
+POST {{Api_HostAddress}}/api/escuelanv
+Content-Type: application/json
+{
+    "nombre": "Instituto belgrano N-1002",
+    "email": "escuelaejemplo12@gmail.com",
+    "telefono": "1165943423",
+    "direccion": "Avenida calle falsa 123"
+}
+
+### Crear administrador para la escuela
 POST {{Api_HostAddress}}/api/usuarionv
 Content-Type: application/json
 {
@@ -44,6 +55,27 @@ Content-Type: application/json
     "apellido": "Mendoza",
     "email": "carlosmendoza@gmail.com",
     "password": "contraseAÑ42",
-    "idRol": 2,
-    "idEscuela": 1
+    "idRol": 1,
+    "idEscuela": 8
+}
+
+POST {{Api_HostAddress}}/api/escuela
+Content-Type: application/json
+{
+    "idEscuelaNV": 8,
+    "codigoEscuela": "28674",
+    "idUsuarioNV": 12,
+    "codigo": "26239",
+    "idRol": 1
+}
+
+POST {{Api_HostAddress}}/api/usuario
+Content-Type: application/json
+{
+    "codigo": "26239",
+    "codigoEscuela": "28674",
+    "idUsuarioNV": 12,
+    "usuario": { "nombreUsuario": "Alguien", "email": "carlosmendoza@gmail.com" },
+    "idEscuela": 28,
+    "idEscuelaNV": 8
 }

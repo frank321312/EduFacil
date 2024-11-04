@@ -3,12 +3,13 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import './inicio.css';
 import { Col, Row } from 'react-bootstrap';
-import { FaFacebook, FaInstagramSquare, FaMoon } from "react-icons/fa";
+import { FaFacebook, FaInstagramSquare } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { IoLogoLinkedin } from "react-icons/io";
 import { AiFillCodeSandboxSquare } from "react-icons/ai";
 import { Link, useNavigate } from 'react-router-dom';
 import NavInicio from '../../components/NavInicio';
+import Footer from '../../components/Footer';
 
 export default function PaginaPrincipal() {
     const navigate = useNavigate()
@@ -80,7 +81,8 @@ export default function PaginaPrincipal() {
                     </Col>
                 </Row>
             </Container>
-            <Container fluid className=' border-t mt-20 p-4'>
+            <Footer />
+            {/* <Container fluid className=' border-t mt-20 p-4'>
                 <Row className='justify-evenly'>
                     <Col xxl={5} sm={5} className='flex justify-center'>
                         <div>
@@ -120,7 +122,7 @@ export default function PaginaPrincipal() {
                         </p>
                     </Col>
                 </Row>
-            </Container>
+            </Container> */}
         </>
     )
 }

@@ -34,7 +34,7 @@ export default function RegistroEscuela() {
             }
             const response = await axios.post("http://localhost:6008/api/escuelanv", data)
             console.log(response)
-            navigate("/autenticacion/registro", { state: { idRol: idRol, idEscuelaNV: response.data.escuela } })
+            navigate("/autenticacion/registro", { state: { idRol: idRol, idEscuelaNV: response.data.escuela, emailEscuela: emailRef.current.value } })
         } catch (error) {
             console.log(error)
             const { message, numero } = error.response.data

@@ -55,6 +55,5 @@ export default function DetalleCurso({ escuela, errorNumber, errorMessage, onReq
                 }
             </Container>
         </>
-
     );
 }

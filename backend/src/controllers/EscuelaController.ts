@@ -11,6 +11,8 @@ import { EscuelaNoValidada } from "../entity/EscuelaNoValidada.js"
 import { ValidationError } from "../errors/ValidationError.js"
 import { UsuarioNoValidado } from "../entity/UsuarioNoValidado.js"
 import { Rol } from "../entity/Rol.js"
+import { obtenerEscuela } from "../functions/EscuelaFunc.js"
+import { isNumber } from "../validations/CursoValidation.js"
 
 export class EscuelaController {
     async obtenerEscuelas(_req: Request, res: Response) {
@@ -130,6 +132,24 @@ export class EscuelaController {
         } catch (error) {
             console.log(error)
             res.status(500).json({ message: "No se pudo obtener la escuela", numero: 49 })
+        }
+    }
+
+    async obtenerEscuelaPorId(req: Request, res: Response) {
+        try {
+            const { idEscuela } = req.params
+            isNumber(idEscuela)
+            const escuela = await AppDataSource.getRepository(Escuela).findOneOrFail({ where: { idEscuela: Number(idEscuela) }, select: selectData })
+            res.json(escuela)
+        } catch (error) {
+            if (error.name === "ValidationError") {
+                res.status(400).json({ message: error.message, numero: error.error })
+            } else if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "Registro no encontrado", numero: 47 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "No se pudo crear la escuela", numero: 48 })
+            }
         }
     }
 }
