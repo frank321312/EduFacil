@@ -142,6 +142,7 @@ export default function NavInicio({ isSearch }) {
                             isLogin ?
                                 <Col className='flex gap-5 justify-end' sm={6} md={5} lg={5} xl={4} xxl={4}>
                                     <Nav.Link as={Link} to="/escuelas" className='mode-dark-text-white' onClick={() => setBuscarEscuela("")}>Escuelas</Nav.Link>
+                                    <Nav.Link as={Link} to="/home" className='mode-dark-text-white'>Panel</Nav.Link>
                                     <div className='flex items-center gap-2'>
                                         <span><b>{login.nombreUsuario}</b></span>
                                         <FaRegUserCircle size={20} />

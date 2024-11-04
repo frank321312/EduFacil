@@ -46,7 +46,7 @@ export default function Cursos() {
 
     return (
         <>
-            <DetalleCurso 
+            <DetalleCurso
                 errorMessage={errorMessage} 
                 errorNumber={errorNumber} 
                 escuela={escuela} 

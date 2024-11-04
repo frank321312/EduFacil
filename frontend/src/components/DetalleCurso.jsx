@@ -1,6 +1,7 @@
 import { Col, Container, Row, Table, Form, Button } from "react-bootstrap";
 import EscuelaData from "./EscuelaData";
 import NavInicio from "./NavInicio";
+import InfoCurso from "./InfoCurso";
 
 export default function DetalleCurso({ escuela, errorNumber, errorMessage, onRequestSearchCurso, buscarCurso, onSetBuscarCurso, cursos }) {
 
@@ -11,7 +12,7 @@ export default function DetalleCurso({ escuela, errorNumber, errorMessage, onReq
             <Container className="mt-6 px-2">
                 <Form>
                     <Row>
-                        <Col>
+                        <Col className="ml-4 col-responsive">
                             <Form.Control
                                 type="text"
                                 placeholder="año-división, ej: 6-7"
@@ -32,26 +33,32 @@ export default function DetalleCurso({ escuela, errorNumber, errorMessage, onReq
                     errorNumber === 17 || errorNumber === 19 ?
                         <h2 className="text-center" style={{ marginTop: "60px" }}>{errorMessage}</h2>
                         :
-                        <Table striped responsive hover>
-                            <thead>
-                                <tr>
-                                    <th>Año</th>
-                                    <th>División</th>
-                                    <th>Turno</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    cursos.map(value => (
-                                        <tr key={value.idCurso} className="cursor-pointer">
-                                            <td>{value.anio}</td>
-                                            <td>{value.division}</td>
-                                            <td>{value.turno.nombre}</td>
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </Table>
+                        <Container className="container-responsive mt-10">
+                            <h1>Cursos</h1>
+                            <Container fluid className="border rounded-lg">
+                                <InfoCurso cursos={cursos} />
+                            </Container>
+                        </Container>
+                    // <Table striped responsive hover>
+                    //     <thead>
+                    //         <tr>
+                    //             <th>Año</th>
+                    //             <th>División</th>
+                    //             <th>Turno</th>
+                    //         </tr>
+                    //     </thead>
+                    //     <tbody>
+                    //         {
+                    //             cursos.map(value => (
+                    //                 <tr key={value.idCurso} className="cursor-pointer">
+                    //                     <td>{value.anio}</td>
+                    //                     <td>{value.division}</td>
+                    //                     <td>{value.turno.nombre}</td>
+                    //                 </tr>
+                    //             ))
+                    //         }
+                    //     </tbody>
+                    // </Table>
                 }
             </Container>
         </>
