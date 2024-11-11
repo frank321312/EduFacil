@@ -20,7 +20,7 @@ export default function IniciarSesion() {
     const cookies = new Cookies()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    
+
     const loginAxios = async (e) => {
         try {
             e.preventDefault()

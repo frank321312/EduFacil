@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { Curso } from "./Curso.js";
 
 @Entity()
@@ -6,13 +6,13 @@ export class Horario {
     @PrimaryGeneratedColumn()
     idHorario: number
     
-    @Column("varchar", { length: 25 })
-    hora: string
+    @Column("varchar")
+    contenido: string
 
-    @Column("varchar", { length: 25 })
-    duracion: string
+    @Column()
+    fila: number
 
-    @OneToOne(() => Curso)
+    @ManyToOne(() => Curso, (curso) => curso.horarios)
     @JoinColumn({ name: "idCurso" })
-    curso: Curso
+    curso: Relation<Curso>
 }

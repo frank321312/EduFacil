@@ -16,6 +16,10 @@
         flex-direction: column;
         align-items: center;
     }
+
+    .col-responsive-info {
+        width: 100%;
+    }
 }
 
 /* Estilos para el curso */
@@ -30,6 +34,16 @@
 .mode-dark .curso-info:hover {
     background-color: #161b24;
 }   
+
+.header-row-curso {
+    background-color: #dbdde0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.mode-dark .header-row-curso {
+    background-color: #171c25;
+}
 
 @media (max-width: 600px) {
     .col-responsive {

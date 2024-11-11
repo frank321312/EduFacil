@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { Escuela } from "./Escuela.js";
 import { Turno } from "./Turno.js";
+import { Horario } from "./Horario.js";
 
 @Entity()
 export class Curso {
@@ -20,4 +21,7 @@ export class Curso {
     @ManyToOne(() => Turno, (t) => t.curso)
     @JoinColumn({ name: "idTurno" })
     turno: Turno
+
+    @OneToMany(() => Horario, (horario) => horario.curso)
+    horarios: Horario[]
 }

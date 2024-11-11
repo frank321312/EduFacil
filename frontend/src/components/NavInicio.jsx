@@ -3,10 +3,11 @@ import { activeModeDark, deactivateModeDark } from '../redux/darkMode';
 import Nav from 'react-bootstrap/Nav';
 import { FaMoon } from "react-icons/fa";
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Button, Col, Form, Row } from 'react-bootstrap';
-import { useState, useEffect, useRef } from 'react';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { useState, useEffect, useRef, act } from 'react';
 import { IoMenu } from "react-icons/io5";
-import { IoSearch } from "react-icons/io5"; import SideBar from './SideBar';
+import { IoSearch } from "react-icons/io5"; 
+import SideBar from './SideBar';
 import "./styles/navBar.css";
 import axios from 'axios';
 import Cookies from 'universal-cookie';
@@ -28,10 +29,13 @@ export default function NavInicio({ isSearch }) {
     const cookies = new Cookies()
     const [isLogin, setIsLogin] = useState(true)
     const animationRef = useRef(null)
+    const [dropdown, setDropdown] = useState(false)
+    const menuRef = useRef(null)
+    const buttonRef = useRef(null)
 
     useEffect(() => {
         document.body.style.paddingTop = "55px"
-        document.body.style.paddingBottom = "80px"
+        document.body.style.paddingBottom = "60px"
         const handleResize = () => {
             setWindowWidth(window.innerWidth)
         };
@@ -58,6 +62,24 @@ export default function NavInicio({ isSearch }) {
         }
     }, [isSideBarAnimation])
 
+    const toggleDropdown = (e) => {
+        setDropdown(!dropdown)
+    }
+
+    const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target) && buttonRef.current && !buttonRef.current.contains(event.target)) {
+            setDropdown(false)
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside)
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        };
+    }, []);
+
     const handleSetSideBar = () => {
         if (isSideBar) {
             setIsSideBarAnimation(!isSideBarAnimation)
@@ -73,9 +95,11 @@ export default function NavInicio({ isSearch }) {
         if (!acitve) {
             dispatch(activeModeDark())
             document.body.classList.add(classModeDark)
+            cookies.set("modo", classModeDark)
         } else {
             dispatch(deactivateModeDark())
             document.body.classList.add(classModeDark)
+            cookies.set("modo", classModeDark)
         }
     }
 
@@ -94,6 +118,15 @@ export default function NavInicio({ isSearch }) {
         navigate(`/escuelas?busqueda=${buscarEscuela}`, { state: listSearchSchool })
     }
 
+    const handleDeleteToken = () => {
+        cookies.remove("jwt")
+        setTimeout(() => {
+            navigate("/")
+        }, 300)
+    }
+
+    // console.log(dropdown)
+
     return (
         <>
             <div onClick={toggleClassDarkMode} className={`cursor-pointer fixed bottom-0 right-0 p-4 m-4 rounded-xl ${document.body.classList.contains("mode-dark") ? "bg-white text-dark" : "bg-dark text-white"}`}>
@@ -105,8 +138,8 @@ export default function NavInicio({ isSearch }) {
                         <Nav.Link as={Link} to="/" style={{ fontWeight: "bold" }} className='nav-logo pl-6 mode-dark-text-white'>EduFacil</Nav.Link>
                     </Col>
                     {
-                        isSearch && windowWidth < 668 &&
-                        <Col xs={7} sm={9} className='flex justify-end cursor-pointer'>
+                        windowWidth <= 668 &&
+                        <Col xs={7} sm={9} className='flex justify-end cursor-pointer' onClick={() => navigate("/buscar")}>
                             <IoSearch size={24} />
                         </Col>
                     }
@@ -134,19 +167,42 @@ export default function NavInicio({ isSearch }) {
 
                     }
                     {
-                        windowWidth < 930 ?
+                        windowWidth < 1200 ?
                             <Col xs={2} sm={1} onClick={handleSetSideBar}>
                                 <IoMenu size={40} />
                             </Col>
                             :
                             isLogin ?
-                                <Col className='flex gap-5 justify-end' sm={6} md={5} lg={5} xl={4} xxl={4}>
+                                <Col className='flex gap-5 justify-end relative' sm={7} md={7} lg={7} xl={6} xxl={5}>
                                     <Nav.Link as={Link} to="/escuelas" className='mode-dark-text-white' onClick={() => setBuscarEscuela("")}>Escuelas</Nav.Link>
+                                    {
+                                        login.idUsuario !== 2 &&
+                                        <>
+                                            <Nav.Link as={Link} to="/home/crear-curso" className='mode-dark-text-white'>Crear curso</Nav.Link>
+                                            <Nav.Link as={Link} to="/home/crear-horario" className='mode-dark-text-white'>Crear horario</Nav.Link>
+                                        </>
+                                    }
                                     <Nav.Link as={Link} to="/home" className='mode-dark-text-white'>Panel</Nav.Link>
-                                    <div className='flex items-center gap-2'>
+                                    <div className='flex items-center gap-2 cursor-pointer' ref={buttonRef} onClick={toggleDropdown}>
                                         <span><b>{login.nombreUsuario}</b></span>
                                         <FaRegUserCircle size={20} />
                                     </div>
+                                    {
+                                        dropdown &&
+                                        <div ref={menuRef} className='absolute text-center py-2 rounded-md dropdown-div' style={{ width: "150px", marginTop: "35px", right: "-20px" }}>
+                                            <Nav.Link as={Link} to="/home/usuario" className='mode-dark-text-white py-2 animation-link'>Configuraciones</Nav.Link>
+                                            <Nav.Link as={Link} to="/home/editar" className='mode-dark-text-white py-2 animation-link'>Editar cuenta</Nav.Link>
+                                            {
+                                                login.idRol === 1 &&
+                                                <Nav.Link as={Link} to="/home/editar/escuela" className='mode-dark-text-white py-2 animation-link'>Editar escuela</Nav.Link>
+                                            }
+                                            {
+                                                login.idRol !== 2 &&
+                                                <Nav.Link as={Link} to="/home/editar-horario" className='mode-dark-text-white py-2 animation-link'>Editar horario</Nav.Link>
+                                            }
+                                            <Nav.Link as={Link} to="/" className='mode-dark-text-white py-2 animation-link' onClick={handleDeleteToken}>Cerrar sesión</Nav.Link>
+                                        </div>
+                                    }
                                 </Col>
                                 :
                                 <Col className='flex gap-5 justify-end' sm={6} md={5} lg={5} xl={4} xxl={4}>
@@ -154,28 +210,45 @@ export default function NavInicio({ isSearch }) {
                                     <Nav.Link as={Link} to="/autenticacion/opcion" className='mode-dark-text-white'>Registrarse</Nav.Link>
                                     <Nav.Link as={Link} to="/autenticacion/iniciarsesion" className='mode-dark-text-white'>Iniciar sesión</Nav.Link>
                                 </Col>
-
                     }
                 </Row>
             </nav>
             {
-                isSideBar && windowWidth < 930 &&
+                isSideBar && windowWidth < 1200 &&
                 <SideBar referencia={animationRef}>
                     <Nav.Link className="" style={{ fontSize: "24px", fontWeight: "bold" }} as={Link}>EduFacil</Nav.Link>
                     <hr className='mt-2' />
                     {
                         isLogin ?
-                            <div className='flex gap-3 mb-4'>
-                                <FaRegUserCircle size={25} />
-                                <span><b>{login.nombreUsuario}</b></span>
-                            </div>
+                            <Container fluid className='px-0'>
+                                <div className='flex gap-3 mb-3'>
+                                    <FaRegUserCircle size={28} />
+                                    <span style={{ fontSize: "18px" }}><b>{login.nombreUsuario}</b></span>
+                                </div>
+                                <Nav.Link as={Link} to="/home" className='mode-dark-text-white py-2 animation-link'>Panel</Nav.Link>
+                                <Nav.Link as={Link} to="/home/usuario" className='mode-dark-text-white py-2 animation-link'>Configuraciones</Nav.Link>
+                                <Nav.Link as={Link} to="/home/editar" className='mode-dark-text-white py-2 animation-link'>Editar cuenta</Nav.Link>
+                                {
+                                    login.idRol === 1 &&
+                                    <Nav.Link as={Link} to="/home/editar/escuela" className='mode-dark-text-white py-2 animation-link'>Editar escuela</Nav.Link>
+                                }
+                                {
+                                    login.idRol !== 2 &&
+                                    <>
+                                        <Nav.Link as={Link} to="/home/crear-curso" className='mode-dark-text-white py-2 animation-link'>Crear curso</Nav.Link>
+                                        <Nav.Link as={Link} to="/home/crear-horario" className='mode-dark-text-white py-2 animation-link'>Crear horario</Nav.Link>
+                                    </>
+                                }
+                                {/* <Nav.Link className="py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link> */}
+                                <Nav.Link as={Link} to="/" className='mode-dark-text-white py-2 animation-link' onClick={handleDeleteToken}>Cerrar sesión</Nav.Link>
+                            </Container>
                             :
                             <>
                                 <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/autenticacion/opcion">Registrarse</Nav.Link>
                                 <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/autenticacion/iniciarsesion">Iniciar sesion</Nav.Link>
+                                {/* <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link> */}
                             </>
                     }
-                    <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link>
                 </SideBar>
             }
         </>

@@ -7,6 +7,7 @@ import { Turno } from "../entity/Turno.js";
 import { EntityNotFoundError } from "typeorm";
 import { isNumber } from "../validations/CursoValidation.js";
 import { obtenerCursoPorAnio, obtenerCursoPorAnioDivison, selectDataCurso } from "../functions/CursoFunc.js";
+import { ValidationError } from "../errors/ValidationError.js";
 
 export class CursoController {
     async obtenerCursos(req: Request, res: Response) {
@@ -23,6 +24,12 @@ export class CursoController {
     async crearCurso(req: Request, res: Response) {
         try {
             const { anio, division, idEscuela, idTurno } = req.body
+            console.log(req.body)
+            if (!anio) {
+                throw new ValidationError("El año no puede estar vacio", 70)
+            } else if (!division) {
+                throw new ValidationError("la division no puede estar vacia", 71)
+            }
             validarAnio(anio)
             validarDivision(division)
             const divisionList: string[] = division.split("-")
@@ -33,7 +40,8 @@ export class CursoController {
             const escuela = await obtenerEscuela(idEscuela)
             const turno = await AppDataSource.getRepository(Turno).findOneByOrFail({ idTurno })
             for (const item of divisionList) {
-                await AppDataSource.createQueryBuilder()
+                if (item != "") {
+                    await AppDataSource.createQueryBuilder()
                     .insert()
                     .into(Curso)
                     .values({
@@ -42,6 +50,7 @@ export class CursoController {
                         escuela,
                         turno
                     }).execute()
+                }
             }
             res.status(204).send()
         } catch (error) {

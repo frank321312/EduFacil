@@ -8,6 +8,7 @@ import { useLocation, useSearchParams } from "react-router-dom";
 export default function Escuelas() {
     const [escuelas, setEscuelas] = useState([])
     const location = useLocation()
+    console.log(location)
     const [searchParams] = useSearchParams()
 
     useEffect(() => {
@@ -18,7 +19,7 @@ export default function Escuelas() {
             ).catch(err => console.log(err))
         } else {
             axios.get("http://localhost:6008/api/obtenerescuelas").then(
-                res => { setEscuelas(res.data); }
+                res => { setEscuelas(res.data) }
             ).catch(err => console.log(err))
         }
     }, [])

@@ -39,26 +39,6 @@ export default function DetalleCurso({ escuela, errorNumber, errorMessage, onReq
                                 <InfoCurso cursos={cursos} />
                             </Container>
                         </Container>
-                    // <Table striped responsive hover>
-                    //     <thead>
-                    //         <tr>
-                    //             <th>Año</th>
-                    //             <th>División</th>
-                    //             <th>Turno</th>
-                    //         </tr>
-                    //     </thead>
-                    //     <tbody>
-                    //         {
-                    //             cursos.map(value => (
-                    //                 <tr key={value.idCurso} className="cursor-pointer">
-                    //                     <td>{value.anio}</td>
-                    //                     <td>{value.division}</td>
-                    //                     <td>{value.turno.nombre}</td>
-                    //                 </tr>
-                    //             ))
-                    //         }
-                    //     </tbody>
-                    // </Table>
                 }
             </Container>
         </>

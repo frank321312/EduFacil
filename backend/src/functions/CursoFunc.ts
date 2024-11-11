@@ -5,7 +5,10 @@ export const selectDataCurso = async (idEscuela: string) => {
     const cursos = await AppDataSource.getRepository(Curso).find({
         relations: { escuela: true, turno: true },
         where: { escuela: { idEscuela: Number(idEscuela) } },
-        select: { idCurso: true, anio: true, division: true, escuela: { idEscuela: true } }
+        select: { idCurso: true, anio: true, division: true, escuela: { idEscuela: true } },
+        order: {
+            anio: "ASC"
+        }
     })
 
     return cursos

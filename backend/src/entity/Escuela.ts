@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
-import { Materia } from './Materia.js';
 import { Curso } from './Curso.js';
 import { Usuario } from './Usuario.js';
 
@@ -23,7 +22,7 @@ export class Escuela {
     @Column("varchar", { length: 5, nullable: true })
     codigo: string | null;
 
-    @Column("varchar", { length: 255, nullable: true })
+    @Column("varchar", { nullable: true })
     imgUrl: string;
 
     @Column("datetime")
@@ -34,9 +33,6 @@ export class Escuela {
 
     @OneToMany(() => Curso, (c) => c.escuela)
     cursos: Curso[]
-
-    @OneToMany(() => Materia, (m) => m.escuela)
-    materias: Materia[]
 
     @OneToMany(() => Usuario, (u) => u.escuela)
     usuarios: Usuario[]

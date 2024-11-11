@@ -5,6 +5,8 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import InfoCurso from "../../../components/InfoCurso"
 import { Container } from "react-bootstrap"
+import Footer from "../../../components/Footer"
+import LayoutHome from "../LayoutHome"
 
 export default function Home() {
     const usuario = useSelector(state => state.login)
@@ -35,8 +37,7 @@ export default function Home() {
     }, [usuario.idEscuela])
 
     return (
-        <>
-            <NavInicio isSearch={false} />
+        <LayoutHome>
             <div className="opcion-animation">
                 <InfoEscuela escuela={escuela} />
                 <Container className="container-responsive mt-10">
@@ -46,6 +47,6 @@ export default function Home() {
                     </Container>
                 </Container>
             </div>
-        </>
+        </LayoutHome>
     )
 }

@@ -1,0 +1,28 @@
+@media (max-width: 500px) {
+    .form-responsive {
+        margin: 0 !important;
+    }
+
+    .form-responsive .row {
+        justify-content: center;
+    }
+
+    .text-form {
+        margin-left: 8%;
+    }
+
+    .container-form-responsive {
+        width: 100%;
+        /* padding: 0 10px; */
+    }
+
+    .button-form {
+        margin-left: 8%;
+    }
+}
+
+@media (max-width: 407px) {
+    .text-responsive {
+        text-align: center;
+    }
+}

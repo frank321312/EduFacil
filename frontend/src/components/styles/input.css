@@ -1,0 +1,26 @@
+.transition-input {
+    background-color: #eaf0f7;
+    border: 1px solid #eaf0f7;
+    transition-duration: .2s;
+}
+
+.mode-dark .transition-input {
+    background-color: #1C2126;
+    border: 1px solid #3B4754;
+}
+
+.transition-input:hover {
+    background-color: #e3e8ee !important;
+}
+
+.transition-input:focus {
+    background-color: #e3e8ee !important;
+}
+
+.mode-dark .transition-input:hover {
+    background-color: #1f2429 !important;
+}
+
+.mode-dark .transition-input:focus {
+    background-color: #1f2429 !important;
+}

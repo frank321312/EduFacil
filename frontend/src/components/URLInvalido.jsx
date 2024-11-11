@@ -1,7 +1,6 @@
 import { Container } from "react-bootstrap";
 import Footer from "./Footer";
 import NavInicio from "./NavInicio";
-import { useEffect } from "react";
 
 export default function URLInvalido() {
     return (

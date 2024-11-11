@@ -7,9 +7,7 @@ import { Escuela } from "./entity/Escuela.js";
 import { EscuelaNoValidada } from "./entity/EscuelaNoValidada.js";
 import { Turno } from "./entity/Turno.js";
 import { Curso } from "./entity/Curso.js";
-import { Materia } from "./entity/Materia.js";
 import { Rol } from "./entity/Rol.js";
-import { Dia } from "./entity/Dia.js";
 import { Horario } from "./entity/Horario.js";
 
 dotenv.config()
@@ -22,7 +20,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: true,
     logging: false,
-    entities: [Rol, Turno, Curso, Usuario, UsuarioNoValidado, Escuela, EscuelaNoValidada, Materia, Dia, Horario],
+    entities: [Rol, Turno, Curso, Usuario, UsuarioNoValidado, Escuela, EscuelaNoValidada, Horario],
     migrations: [],
     subscribers: [],
 })

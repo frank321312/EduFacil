@@ -34,7 +34,12 @@ GET {{Api_HostAddress}}/api/escuela?nombre=tin
 GET {{Api_HostAddress}}/api/escuela/martin
 
 ### Obtener todos los usuarios
-GET {{Api_HostAddress}}/api/obtenerusuarios?id=1
+GET {{Api_HostAddress}}/api/obtenerusuarios?id=2
+
+### Obtener un usuario de una escuela
+GET {{Api_HostAddress}}/api/obtenerusuario?escuela=1&username=Doe
+
+GET {{Api_HostAddress}}/api/obtenerdatos/1
 
 ### Crear una escuela
 POST {{Api_HostAddress}}/api/escuelanv
@@ -79,3 +84,7 @@ Content-Type: application/json
     "idEscuela": 28,
     "idEscuelaNV": 8
 }
+
+GET {{Api_HostAddress}}/api/obtenerdatos/1
+
+GET {{Api_HostAddress}}/api/obtener-horario/1

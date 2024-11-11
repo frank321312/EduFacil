@@ -21,6 +21,14 @@ import URLInvalido from './components/URLInvalido'
 import OlvideContrasenaEmail from './page/autenticacion/OlvideContraseñaEmail'
 import OlvideContrasenaCodigo from './page/autenticacion/OlvideContraseñaCodigo'
 import OlvideContrasena from './page/autenticacion/OlvideContrasenaPass'
+import EditarCuenta from './page/home/paginaPrincipal/Editar'
+import EditarEscuela from './page/home/paginaPrincipal/EditarEscuela'
+import CrearCurso from './page/home/paginaPrincipal/CrearCurso'
+import NotFound from './components/NotFound'
+import Horario from './page/home/paginaPrincipal/Horario'
+import VerHorario from './page/home/paginaPrincipal/VerHorario'
+import BuscadorMovil from './page/inicio/BuscarMovil'
+import EditarHorario from './page/home/paginaPrincipal/EditarHorario'
 
 function App() {
   const data = useSelector(state => state.login)
@@ -29,10 +37,13 @@ function App() {
 
   useEffect(() => {
     const token = cookies.get("jwt")
-    
+    const modo = cookies.get("modo")
     if (token !== undefined) {
       const usuario = decodeToken(token)
       dispatch(autenticar(usuario))
+    }
+    if (modo !== undefined) {
+      document.body.classList.add(modo)
     }
   }, [])
 
@@ -59,14 +70,23 @@ function App() {
         <Route path="/escuelas" element={<Escuelas />} />
         <Route path="/escuela/cursos" element={<Cursos />} />
         <Route path="/escuela/cursos/:idEscuela/:curso" element={<Cursos />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/" element={<PaginaPrincipal />} />
+        <Route path="/horario" element={<VerHorario />} />
+        <Route path="/buscar" element={<BuscadorMovil />} />
+
+        {/* Rutas que solo pueden acceder usuarios registrados y logueados */}
+        <Route path="/home" element={<Home />} />
+        <Route path="/home/editar" element={<EditarCuenta />} />
+        <Route path="/home/editar/escuela" element={<EditarEscuela />} />
+        <Route path="/home/crear-curso" element={<CrearCurso />} />
+        <Route path="/home/crear-horario" element={<Horario />} />
+        <Route path="/home/editar-horario" element={<EditarHorario />} />
 
         {/* <Route element={<ProtectedRoute isAllowed={count === 0 ? false : true}/>}>
           <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />
         </Route> */}
         {/* Ruta no encontrada */}
-        <Route path='*' element={<h1>ruta</h1>} />
+        <Route path='*' element={<NotFound />} />
         <Route path='/url-invalido' element={<URLInvalido />} />
       </Routes>
     </Router>

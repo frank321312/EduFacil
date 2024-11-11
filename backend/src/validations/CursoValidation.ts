@@ -5,23 +5,31 @@ import { ValidationError } from "../errors/ValidationError.js"
 export const validarAnio = (anio: string) => {
     const anioNum = Number(anio)
     if (isNaN(anioNum)) {
-        throw new TypeError("Tipo de dato invalido")
+        throw new TypeError("Debe ser un numero valido")
     } else if (anioNum < 0 || anioNum > 8) {
-        throw new ValidationError("Año fuera de rango", 1)
+        throw new ValidationError("Año fuera de rango, 1-8", 1)
     }
 }
 
 export const validarDivision = (division: string) => {
     const divisionList = division.split("-")
-
-    for (const index of divisionList) {
+    const listDivsion = division.split("")
+    const filterNotSpace = divisionList.filter(x => x !== "")
+    for (const element in listDivsion) {
+        if (listDivsion[element] === "-") {
+            if (listDivsion[element] == listDivsion[Number(element) + 1]) {
+                throw new ValidationError("No puede haber un '-' despues de otro", 20)
+            }
+        }
+    }
+    for (const index of filterNotSpace) {
         const tieneDosElementos = divisionList.filter(x => x == index)
         if (tieneDosElementos.length > 1) {
             throw new ValidationError("No puede haber divisiones repetidas", 2)
         }
     }
     if (!/^[a-zA-Z0-9-]+$/g.test(division)) {
-        throw new ValidationError("Texto invalido", 3)
+        throw new ValidationError("Solo puede tener numero, -, letras", 3)
     } else if (division.length > 50) {
         throw new ValidationError("Maximo 25 divisiones", 4)
     } else {

@@ -11,6 +11,7 @@ import { ValidationError } from "../errors/ValidationError.js";
 import jwt from 'jsonwebtoken';
 import { Like } from "typeorm";
 import { EscuelaNoValidada } from "../entity/EscuelaNoValidada.js";
+import { Escuela } from "../entity/Escuela.js";
 
 export class UsuarioController {
     async crearUsuarioNV(req: Request, res: Response) {
@@ -133,7 +134,7 @@ export class UsuarioController {
             const userExists = await AppDataSource.getRepository(Usuario).findOneOrFail({ where: [{ email: emailUsername }, { nombreUsuario: emailUsername }] })
             if (userExists.password !== password) throw new ValidationError("Contraseña invalida", 31)
             const usuario = await obtenerDatoUsuarioAuth(userExists.idUsuario)
-            const token = jwt.sign({ ...usuario }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 })
+            const token = jwt.sign({ ...usuario }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 })
             res.json(token)
         } catch (error) {
             if (error.name === "ValidationError") {
@@ -171,7 +172,8 @@ export class UsuarioController {
     async obtenerUsuario(req: Request, res: Response) {
         try {
             const username = req.query.username as string
-            const id = req.query.user
+            const id = req.query.escuela
+            console.log(req.query)
             if (isNaN(Number(id))) {
                 throw new TypeError("Id invalido")
             }
@@ -267,7 +269,7 @@ export class UsuarioController {
         }
     }
 
-    async reenviarCodigoEscuela(req: Request, res:Response) {
+    async reenviarCodigoEscuela(req: Request, res: Response) {
         try {
             const { idEscuelaNV } = req.body
             const codigo = generarNumeroCincoDigitos()
@@ -315,6 +317,62 @@ export class UsuarioController {
         } catch (error) {
             if (error.name === "EntityNotFoundError") {
                 res.status(404).json({ message: "No se pudo reenviar el codigo", numero: 32 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "Error interno del servidor", numero: 37 })
+            }
+        }
+    }
+
+    async modificarDatos(req: Request, res: Response) {
+        try {
+            const { nombreUsuario, nombre, apellido, email, password, idUsuario } = req.body
+            const repositoryUsuario = AppDataSource.getRepository(Usuario)
+            const usuario = await repositoryUsuario.findOneBy({ idUsuario })
+            const responseUserExistsEmail = await Promise.all([existeEmail(UsuarioNoValidado, email),
+            existeEmail(Usuario, email)
+            ])
+            const responseUserExistsUsername = await Promise.all([existeNombre(UsuarioNoValidado, nombreUsuario),
+            existeNombre(Usuario, nombreUsuario)
+            ])
+            const responseExistsEmail = await Promise.all([existeEmail(EscuelaNoValidada, email),
+            existeEmail(Escuela, email)
+            ])
+            if (responseUserExistsEmail.includes(true) && usuario.email !== email) {
+                throw new ValidationError("Ya existe un usuario con ese email", 28)
+            }
+            if (responseUserExistsUsername.includes(true) && usuario.nombreUsuario !== nombreUsuario) {
+                throw new ValidationError("Ya existe un usuario con ese nombre", 29)
+            }
+            if (responseExistsEmail.includes(true)) {
+                throw new ValidationError("Ya existe una escuela con ese email", 28)
+            }
+            validarNombreUsuario(nombreUsuario)
+            validarNombre(nombre)
+            validarApellido(apellido)
+            validarCorreo(email)
+            validarPassowrd(password)
+            AppDataSource.getRepository(Usuario).merge(usuario, { nombreUsuario, nombre, apellido, email, password })
+            await repositoryUsuario.save(usuario)
+            res.status(204).send()
+        } catch (error) {
+            if (error.name === "ValidationError") {
+                res.status(400).json({ message: error.message, numero: error.error })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "No se pudo guardar los cambios", numero: 50 })
+            }
+        }
+    }
+
+    async ObtenerDatosId(req: Request, res: Response) {
+        try {
+            const { idUsuario } = req.params
+            const usuario = await AppDataSource.getRepository(Usuario).findOneOrFail({ where: { idUsuario: Number(idUsuario) }, select: { nombreUsuario: true, nombre: true, apellido: true, email: true, password: true } })
+            res.json(usuario)
+        } catch (error) {
+            if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "No se encontro al usuario", numero: 32 })
             } else {
                 console.log(error)
                 res.status(500).json({ message: "Error interno del servidor", numero: 37 })

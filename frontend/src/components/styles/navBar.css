@@ -1,5 +1,5 @@
 .animation-link {
-    transition-duration: .5s;
+    transition-duration: .2s;
 }
 
 .animation-link:hover {
@@ -7,5 +7,15 @@
 }
 
 .mode-dark .animation-link:hover {
-    background-color: #161b24;
+    background-color: #272e3b;
 }
+
+.dropdown-div {
+    background-color: #faf9f9 !important;
+}
+
+.mode-dark .dropdown-div {
+    background-color: #171c25 !important;
+}
+
+/* backgroundColor: "#171c25" */

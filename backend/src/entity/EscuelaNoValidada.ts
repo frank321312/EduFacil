@@ -20,7 +20,7 @@ export class EscuelaNoValidada {
     @Column("varchar", { length: 5 })
     codigo: string;
 
-    @Column("varchar", { length: 255, nullable: true })
+    @Column("varchar", { nullable: true })
     imgUrl: string;
 
     @Column("datetime")
