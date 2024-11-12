@@ -6,6 +6,7 @@ import { createRequestPost } from "../../../functions/configToken";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { isEqual } from "../../../functions/validations.js";
+import Cookies from "universal-cookie";
 
 export default function Horario() {
     const user = useSelector((state) => state.login)
@@ -14,6 +15,8 @@ export default function Horario() {
     const cursoRef = useRef(null)
     const [errorMessage, setErrorMessage] = useState("")
     const [errorNumber, setErrorNumber] = useState(0)
+    const darkMode = useSelector((state) => state.darkMode)
+    const cookies = new Cookies()
 
     const handleCellChange = (rowIndex, colIndex, value) => {
         const newData = [...data]
@@ -86,7 +89,7 @@ export default function Horario() {
                         }
                     </select>
                 </div>
-                <Table responsive bordered hover className="mt-3 w-full">
+                <Table responsive bordered hover variant={darkMode.active || cookies.get("modo") ? "dark" : ""} style={{  }} className="mt-3 w-full">
                     <thead>
                         <tr>
                             {data[0].map((_, colIndex) => (
@@ -101,6 +104,7 @@ export default function Horario() {
                                     <td key={colIndex} className="p-0">
                                         <input
                                             type="text"
+                                            className="input-horario"
                                             value={cell}
                                             style={{ width: "100%", outline: "none", padding: "5px" }}
                                             onChange={(e) =>

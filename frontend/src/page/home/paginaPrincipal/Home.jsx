@@ -1,11 +1,9 @@
 import { useSelector } from "react-redux"
-import NavInicio from "../../../components/NavInicio"
 import InfoEscuela from "../../../components/InfoEscuela"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import InfoCurso from "../../../components/InfoCurso"
 import { Container } from "react-bootstrap"
-import Footer from "../../../components/Footer"
 import LayoutHome from "../LayoutHome"
 
 export default function Home() {

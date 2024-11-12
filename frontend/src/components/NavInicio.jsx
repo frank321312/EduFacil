@@ -6,13 +6,13 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { useState, useEffect, useRef, act } from 'react';
 import { IoMenu } from "react-icons/io5";
-import { IoSearch } from "react-icons/io5"; 
-import SideBar from './SideBar';
+import { IoSearch } from "react-icons/io5";
 import "./styles/navBar.css";
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { requestVerifyToken } from '../functions/verifyToken';
 import { FaRegUserCircle } from "react-icons/fa";
+import Offcanvas from 'react-bootstrap/Offcanvas';
 
 export default function NavInicio({ isSearch }) {
     const acitve = useSelector((state) => state.darkMode.active)
@@ -20,18 +20,19 @@ export default function NavInicio({ isSearch }) {
     const classModeDark = useSelector((state) => state.darkMode.class)
     const dispatch = useDispatch()
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
-    const [isSideBar, setIsSideBar] = useState(false)
-    const [isSideBarAnimation, setIsSideBarAnimation] = useState(false)
     const [searchParams] = useSearchParams()
     const [buscarEscuela, setBuscarEscuela] = useState("")
     const [listSearchSchool, setListSearchSchool] = useState([])
     const navigate = useNavigate()
     const cookies = new Cookies()
     const [isLogin, setIsLogin] = useState(true)
-    const animationRef = useRef(null)
     const [dropdown, setDropdown] = useState(false)
     const menuRef = useRef(null)
     const buttonRef = useRef(null)
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     useEffect(() => {
         document.body.style.paddingTop = "55px"
@@ -56,12 +57,6 @@ export default function NavInicio({ isSearch }) {
         }
     }, [])
 
-    useEffect(() => {
-        if (animationRef.current && !isSideBarAnimation) {
-            animationRef.current.classList.add("animacion-side-bar-fin")
-        }
-    }, [isSideBarAnimation])
-
     const toggleDropdown = (e) => {
         setDropdown(!dropdown)
     }
@@ -70,7 +65,7 @@ export default function NavInicio({ isSearch }) {
         if (menuRef.current && !menuRef.current.contains(event.target) && buttonRef.current && !buttonRef.current.contains(event.target)) {
             setDropdown(false)
         }
-    };
+    }
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside)
@@ -78,27 +73,19 @@ export default function NavInicio({ isSearch }) {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside)
         };
-    }, []);
-
-    const handleSetSideBar = () => {
-        if (isSideBar) {
-            setIsSideBarAnimation(!isSideBarAnimation)
-            setTimeout(() => setIsSideBar(!isSideBar), 300)
-        } else {
-            setIsSideBar(!isSideBar)
-            setIsSideBarAnimation(!isSideBarAnimation)
-        }
-    }
+    }, [])
 
     const toggleClassDarkMode = () => {
         document.body.classList = ""
         if (!acitve) {
             dispatch(activeModeDark())
             document.body.classList.add(classModeDark)
+            cookies.remove("modo")
             cookies.set("modo", classModeDark)
         } else {
             dispatch(deactivateModeDark())
             document.body.classList.add(classModeDark)
+            cookies.remove("modo")
             cookies.set("modo", classModeDark)
         }
     }
@@ -124,8 +111,6 @@ export default function NavInicio({ isSearch }) {
             navigate("/")
         }, 300)
     }
-
-    // console.log(dropdown)
 
     return (
         <>
@@ -168,7 +153,7 @@ export default function NavInicio({ isSearch }) {
                     }
                     {
                         windowWidth < 1200 ?
-                            <Col xs={2} sm={1} onClick={handleSetSideBar}>
+                            <Col xs={2} sm={1} role='button' onClick={handleShow}>
                                 <IoMenu size={40} />
                             </Col>
                             :
@@ -198,7 +183,10 @@ export default function NavInicio({ isSearch }) {
                                             }
                                             {
                                                 login.idRol !== 2 &&
-                                                <Nav.Link as={Link} to="/home/editar-horario" className='mode-dark-text-white py-2 animation-link'>Editar horario</Nav.Link>
+                                                <>
+                                                    <Nav.Link as={Link} to="/home/editar-horario" className='mode-dark-text-white py-2 animation-link'>Editar horario</Nav.Link>
+                                                    <Nav.Link as={Link} to="/home/editar-cursos" className='mode-dark-text-white py-2 animation-link'>Editar cursos</Nav.Link>
+                                                </>
                                             }
                                             <Nav.Link as={Link} to="/" className='mode-dark-text-white py-2 animation-link' onClick={handleDeleteToken}>Cerrar sesión</Nav.Link>
                                         </div>
@@ -213,11 +201,11 @@ export default function NavInicio({ isSearch }) {
                     }
                 </Row>
             </nav>
-            {
-                isSideBar && windowWidth < 1200 &&
-                <SideBar referencia={animationRef}>
-                    <Nav.Link className="" style={{ fontSize: "24px", fontWeight: "bold" }} as={Link}>EduFacil</Nav.Link>
-                    <hr className='mt-2' />
+            <Offcanvas show={show} onHide={handleClose}>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title className='font-extrabold' style={{ fontSize: "28px", fontWeight: "bold", paddingLeft: "13px" }} >EduFacil</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body style={{ paddingLeft: "30px" }}>
                     {
                         isLogin ?
                             <Container fluid className='px-0'>
@@ -235,6 +223,7 @@ export default function NavInicio({ isSearch }) {
                                 {
                                     login.idRol !== 2 &&
                                     <>
+                                        <Nav.Link as={Link} to="/home/crear-cursos" className='mode-dark-text-white py-2 animation-link'>Editar cursos</Nav.Link>
                                         <Nav.Link as={Link} to="/home/crear-curso" className='mode-dark-text-white py-2 animation-link'>Crear curso</Nav.Link>
                                         <Nav.Link as={Link} to="/home/crear-horario" className='mode-dark-text-white py-2 animation-link'>Crear horario</Nav.Link>
                                     </>
@@ -249,8 +238,8 @@ export default function NavInicio({ isSearch }) {
                                 {/* <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link> */}
                             </>
                     }
-                </SideBar>
-            }
+                </Offcanvas.Body>
+            </Offcanvas>
         </>
     )
 }

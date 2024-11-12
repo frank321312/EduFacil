@@ -19,3 +19,7 @@
 }
 
 /* backgroundColor: "#171c25" */
+
+.disabled {
+    pointer-events: none;
+}

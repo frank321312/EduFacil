@@ -86,12 +86,22 @@ export class CursoController {
         try {
             const { anio, division, idTurno } = req.body
             const { idCurso } = req.params
+            validarAnio(anio)
+            if (division.length > 2 || !division) {
+                throw new ValidationError("División invalida", 31)
+            } else if (!/^[a-zA-Z0-9]+$/g.test(division)) {
+                throw new ValidationError("Solo debe tener valores alfanumericos", 30)
+            }
+            const cursoRepository = AppDataSource.getRepository(Curso)
             const turno = await AppDataSource.getRepository(Turno).findOneByOrFail({ idTurno })
-            const curso = await AppDataSource.getRepository(Curso).findOneByOrFail({ idCurso: Number(idCurso) })
+            const curso = await cursoRepository.findOneByOrFail({ idCurso: Number(idCurso) })
             AppDataSource.getRepository(Curso).merge(curso, { anio, division, turno })
+            cursoRepository.save(curso)
             res.status(204).send()
         } catch (error) {
-            if (error.name === "EntityNotFoundError") {
+            if (error.name === "ValidationError") {
+                res.status(400).json({ message: error.message, numero: error.error })
+            } else if (error.name === "EntityNotFoundError") {
                 res.status(404).json({ message: "Curso no encontrado", numero: 15 })
             } else {
                 console.log(error)

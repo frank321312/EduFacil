@@ -29,6 +29,7 @@ import Horario from './page/home/paginaPrincipal/Horario'
 import VerHorario from './page/home/paginaPrincipal/VerHorario'
 import BuscadorMovil from './page/inicio/BuscarMovil'
 import EditarHorario from './page/home/paginaPrincipal/EditarHorario'
+import EditarCursos from './page/home/paginaPrincipal/EditarCurso'
 
 function App() {
   const data = useSelector(state => state.login)
@@ -81,6 +82,7 @@ function App() {
         <Route path="/home/crear-curso" element={<CrearCurso />} />
         <Route path="/home/crear-horario" element={<Horario />} />
         <Route path="/home/editar-horario" element={<EditarHorario />} />
+        <Route path="/home/editar-cursos" element={<EditarCursos />} />
 
         {/* <Route element={<ProtectedRoute isAllowed={count === 0 ? false : true}/>}>
           <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />

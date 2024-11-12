@@ -1,17 +1,20 @@
 .animacion-side-bar-inicio {
     animation-name: desplazarInicio;
     animation-duration: .5s;
-    animation-fill-mode: forwards;
 }
 
 .animacion-side-bar-fin {
     animation-name: desplazarFin;
     animation-duration: .5s;
-    animation-fill-mode: forwards;
 }
 
 .mode-dark .side-bar {
     background-color: #0d1117 !important;
+}
+
+.mode-dark .offcanvas {
+    background-color: #0d1117 !important;
+    color: #fff !important;
 }
 
 @keyframes desplazarInicio {
@@ -35,19 +38,19 @@
 }
 
 @media (min-width: 350px) {
-    .side-bar {
+    .offcanvas {
         width: 230px !important;
     }
 }
 
 @media (min-width: 350px) {
-    .side-bar {
+    .offcanvas {
         width: 270px !important;
     }
 }
 
 @media (min-width: 450px) {
-    .side-bar {
+    .offcanvas {
         width: 350px !important;
     }
 }

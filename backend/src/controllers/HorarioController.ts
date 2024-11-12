@@ -19,7 +19,6 @@ export class HorarioController {
             for (const list of tabla) {
                 row += 1
                 for (const value of list) {
-                    console.log(value)
                     await AppDataSource.createQueryBuilder()
                         .insert()
                         .into(Horario)
@@ -46,7 +45,6 @@ export class HorarioController {
     async obtenerHorario(req: Request, res: Response) {
         try {
             const { idCurso } = req.params
-            console.log(req.params)
             const curso = await AppDataSource.getRepository(Curso).findOneByOrFail({ idCurso: Number(idCurso) })
             const horarios = await AppDataSource.getRepository(Horario).findBy({ curso })
             const listNumbers = horarios.map(x => isNaN(Number(x.fila)) === false && x.fila)
@@ -96,7 +94,6 @@ export class HorarioController {
     async editarHorario(req: Request, res: Response) {
         try {
             const { tabla, idCurso } = req.body
-            console.log(tabla)
             validarHorario(tabla)
             const curso = await AppDataSource.getRepository(Curso).findOneByOrFail({ idCurso })
             const horario = await AppDataSource.getRepository(Horario).findOneBy({ curso })
@@ -107,7 +104,6 @@ export class HorarioController {
             for (const list of tabla) {
                 row += 1
                 for (const value of list) {
-                    console.log(value)
                     await AppDataSource.createQueryBuilder()
                         .insert()
                         .into(Horario)

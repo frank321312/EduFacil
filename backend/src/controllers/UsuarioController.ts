@@ -12,13 +12,12 @@ import jwt from 'jsonwebtoken';
 import { Like } from "typeorm";
 import { EscuelaNoValidada } from "../entity/EscuelaNoValidada.js";
 import { Escuela } from "../entity/Escuela.js";
+import { nodemailerCode } from "../nodemailer/nodemailer.js";
 
 export class UsuarioController {
     async crearUsuarioNV(req: Request, res: Response) {
         try {
             const { nombreUsuario, nombre, apellido, email, password, idEscuela, idRol } = req.body
-            // console.log(req.body)
-            console.log(req.body)
             if (typeof idRol === "object") {
                 isNumber(idRol.idRol)
             } else {
@@ -26,6 +25,7 @@ export class UsuarioController {
             }
             isNumber(idEscuela)
             validarNombreUsuario(nombreUsuario)
+            console.log(req.body)
             validarNombre(nombre)
             validarApellido(apellido)
             validarCorreo(email)
@@ -52,11 +52,13 @@ export class UsuarioController {
             if (rol.idRol === 1) {
                 // Usar nodemailer para enviar el codigo a la escuela, al daministrador fuera del if
                 const escuela = await AppDataSource.getRepository(EscuelaNoValidada).findOneByOrFail({ idEscuelaNV: idEscuela })
+                await nodemailerCode(escuela.email, Number(escuela.codigo))
             }
             // Usar nodemailer para enviar el codigo de validacion al usuario sin importar su rol
             const codigoValidacion = generarNumeroCincoDigitos()
             const userType: UsuarioType = { ...req.body, codigo: codigoValidacion }
             const idUsuarioNV = await insertarUsuarioNV(userType, idRol, idEscuela)
+            await nodemailerCode(email, codigoValidacion)
 
             res.status(200).json({ idUsuarionv: idUsuarioNV })
         } catch (error) {
@@ -211,6 +213,7 @@ export class UsuarioController {
             await respositoryUsuario.save(usuario)
 
             // Usar nodemailer para enviar en codigo de verificacion para el usuario
+            await nodemailerCode(email, codigo)
 
             res.status(204).send()
         } catch (error) {
@@ -279,6 +282,7 @@ export class UsuarioController {
             await repositoryEscuelaNV.save(escuelaNV)
 
             // Usar nodemailer para reenviar el codigo a la escuela
+            await nodemailerCode(escuelaNV.email, codigo)
 
             res.status(204).send()
         } catch (error) {
@@ -302,6 +306,7 @@ export class UsuarioController {
                 repositoryUsuarioNV.merge(usuarioNV, { codigo: codigo.toString() })
                 await repositoryUsuarioNV.save(usuarioNV)
                 // Usar nodemailer para reenviar el codigo
+                await nodemailerCode(usuarioNV.email, codigo)
 
                 return res.status(204).send()
             } else {
@@ -311,6 +316,7 @@ export class UsuarioController {
                 repositoryUsuario.merge(usuario, { codigo: codigo.toString() })
                 await repositoryUsuario.save(usuario)
                 // Usar nodemailer para reenviar el codigo
+                await nodemailerCode(usuario.email, codigo)
 
                 return res.status(204).send()
             }

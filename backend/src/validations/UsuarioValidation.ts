@@ -3,20 +3,23 @@ import { ValidationError } from "../errors/ValidationError.js"
 import { AppDataSource } from "../data-source.js"
 
 export const validarNombreUsuario = (username: string) => {
+    if (!username) {
+        throw new ValidationError("El nombre no puede estar vacio", 21)
+    }
     if (username.length < 3 || username.length >= 30) {
         throw new ValidationError("Minimo 3 caracteres, maximo 30", 21)
     }
     // Obtenemos todos los espacio de la cadena
     const listSpace = username.match(/\s/g)
     // Lo pasomos a string, si no hay espacio es una cedena vacia por defecto
-    let spaceString = listSpace != null ? listSpace[0] : ""
+    let spaceString = listSpace != null ? listSpace : ""
     // Usamos un expresion regular para obtener toda la cadena que le sigue despues de un espacio
     const listData = username.match(/(?<=\s).*/g)
     // Si La cadena despues del espacio esta vacia se le asigna un valor por defecto para que no haya errores
     let dataString = listData != null ? listData[0] : "value defect"
     if (spaceString.length > 1) {
         throw new ValidationError("Solo puede haber un espacio", 21)
-    } else if (dataString.length < 3) {
+    } else if (dataString.length < 2) {
         throw new ValidationError("Debe ingresar algo despues del espacio", 21)
     } else if (/^[^\s][a-zA-Z0-9\s]+[^\s]$/.test(username) == false) {
         throw new ValidationError(`Nombre de usuario invalido`, 21)
@@ -24,13 +27,16 @@ export const validarNombreUsuario = (username: string) => {
 }
 
 export const validarNombre = (propiedad: string) => {
+    if (!propiedad) {
+        throw new ValidationError("El nombre no puedo estar vacio", 22)
+    }
     if (propiedad.length < 3 || propiedad.length >= 30) {
         throw new ValidationError("Minimo 3 caracteres, maximo 30", 22)
     }
     // Obtenemos todos los espacio de la cadena
     const listSpace = propiedad.match(/\s/g)
     // Lo pasomos a string, si no hay espacio es una cedena vacia por defecto
-    let spaceString = listSpace != null ? listSpace[0] : ""
+    let spaceString = listSpace != null ? listSpace : ""
     // Usamos un expresion regular para obtener toda la cadena que le sigue despues de un espacio
     const listData = propiedad.match(/(?<=\s).*/g)
     // Si La cadena despues del espacio esta vacia se le asigna un valor por defecto para que no haya errores
@@ -45,13 +51,16 @@ export const validarNombre = (propiedad: string) => {
 }
 
 export const validarApellido = (propiedad: string) => {
+    if (!propiedad) {
+        throw new ValidationError("El apellido no puede estar vacio", 38)
+    }
     if (propiedad.length < 3 || propiedad.length >= 30) {
         throw new ValidationError("Minimo 3 caracteres, maximo 30", 38)
     }
     // Obtenemos todos los espacio de la cadena
     const listSpace = propiedad.match(/\s/g)
     // Lo pasomos a string, si no hay espacio es una cedena vacia por defecto
-    let spaceString = listSpace != null ? listSpace[0] : ""
+    let spaceString = listSpace != null ? listSpace : ""
     // Usamos un expresion regular para obtener toda la cadena que le sigue despues de un espacio
     const listData = propiedad.match(/(?<=\s).*/g)
     // Si La cadena despues del espacio esta vacia se le asigna un valor por defecto para que no haya errores
