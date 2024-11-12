@@ -32,12 +32,12 @@ AppDataSource.initialize().then(async () => {
     }
 }).catch(error => console.log(error))
 
+dotenv.config()
 const app = express()
 export const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.json())
 app.use("/uploads", express.static(path.join(__dirname, "uplodas")))
 app.use(cors())
-dotenv.config()
 const PORT = process.env.PORT || 6008
 
 app.get('/get-imagen/:image', (req, res) => {
@@ -74,3 +74,5 @@ app.use("/api", horarioRoutes)
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })
+
+// comentario
