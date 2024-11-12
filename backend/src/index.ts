@@ -44,6 +44,10 @@ app.get('/get-imagen/:image', (req, res) => {
     res.sendFile(join(__dirname, `/uploads/${req.params.image}`))
 });
 
+app.get("/", (_req: Request, res: Response) => {
+    res.send("Hello world!!!!!")
+})
+
 app.post("/api/token", (req: Request, res: Response) => {
     try {
         const { token } = req.body
@@ -70,7 +74,3 @@ app.use("/api", horarioRoutes)
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })
-
-const sa = [{ x: "sa", y: "sappe" }]
-
-// const sape = sa.map(x => x.)
