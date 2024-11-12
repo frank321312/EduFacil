@@ -16,7 +16,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 import path, { dirname, join } from "path";
 import { fileURLToPath } from "node:url";
-import uploadRoutes from './routes/UploadRoute.js'
+import uploadRoutes from './routes/UploadRoute.js';
 
 AppDataSource.initialize().then(async () => {
     console.log("Conexion existosa con la base de datos")
