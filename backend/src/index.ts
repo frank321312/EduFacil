@@ -70,3 +70,7 @@ app.use("/api", horarioRoutes)
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })
+
+const sa = [{ x: "sa", y: "sappe" }]
+
+// const sape = sa.map(x => x.)

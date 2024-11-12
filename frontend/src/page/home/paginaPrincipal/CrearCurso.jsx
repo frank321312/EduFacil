@@ -32,10 +32,10 @@ export default function CrearCurso() {
             setErrorMessage("")
         } catch (error) {
             console.log(error)
-            tokenError(error)
             const { message, numero } = error.response.data
             setErrorNumber(numero)
             setErrorMessage(message)     
+            tokenError(error)
         }
     }
 

@@ -8,6 +8,7 @@ import { EntityNotFoundError } from "typeorm";
 import { isNumber } from "../validations/CursoValidation.js";
 import { obtenerCursoPorAnio, obtenerCursoPorAnioDivison, selectDataCurso } from "../functions/CursoFunc.js";
 import { ValidationError } from "../errors/ValidationError.js";
+import { Horario } from "../entity/Horario.js";
 
 export class CursoController {
     async obtenerCursos(req: Request, res: Response) {
@@ -71,12 +72,14 @@ export class CursoController {
         try {
             const { idCurso } = req.params
             const curso = await AppDataSource.getRepository(Curso).findOneByOrFail({ idCurso: Number(idCurso) })
+            await AppDataSource.getRepository(Horario).delete({ curso })
             await AppDataSource.getRepository(Curso).delete(curso)
             res.status(204).send()
         } catch (error) {
             if (error.name === "EntityNotFoundError") {
                 res.status(404).json({ message: "Curso no encontrado", numero: 13 })
             } else {
+                console.log(error)
                 res.status(500).json({ message: "No se pudo eliminar el curso", numero: 14 })
             }
         }
@@ -94,13 +97,19 @@ export class CursoController {
             }
             const cursoRepository = AppDataSource.getRepository(Curso)
             const turno = await AppDataSource.getRepository(Turno).findOneByOrFail({ idTurno })
-            const curso = await cursoRepository.findOneByOrFail({ idCurso: Number(idCurso) })
+            const curso = await cursoRepository.findOneOrFail({ where: { idCurso: Number(idCurso) }, relations: { escuela: true } })
+            const existeCurso = await cursoRepository.exists({ where: { anio: curso.anio, division: curso.division, escuela: curso.escuela } })
+            if (existeCurso) {
+                throw new ValidationError("Ya existe ese curso", 30)
+            }
             AppDataSource.getRepository(Curso).merge(curso, { anio, division, turno })
             cursoRepository.save(curso)
             res.status(204).send()
         } catch (error) {
             if (error.name === "ValidationError") {
                 res.status(400).json({ message: error.message, numero: error.error })
+            } else  if (error.name === "TypeError") {
+                res.status(400).json({ message: error.message, numero: 2 })
             } else if (error.name === "EntityNotFoundError") {
                 res.status(404).json({ message: "Curso no encontrado", numero: 15 })
             } else {

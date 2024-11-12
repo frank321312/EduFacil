@@ -39,6 +39,19 @@ export const createRequestPost = async (url, object) => {
     return response
 }
 
+export const createRequestDelete = async (url) => {
+    const cookies = new Cookies()
+    const token = cookies.get("jwt")
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.delete(url, config)
+
+    return response
+}
+
 export const tokenError = (error) => {
     const cookies = new Cookies()
     const listError = [1, 2, 3]
