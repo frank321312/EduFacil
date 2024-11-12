@@ -93,7 +93,7 @@ export default function NavInicio({ isSearch }) {
     const handleSearchEscuela = async (e) => {
         try {
             setBuscarEscuela(e.target.value)
-            const response = await axios.get(`http://localhost:6008/api/escuela?nombre=${buscarEscuela}`)
+            const response = await axios.get(`https://edufacil.onrender.com/api/escuela?nombre=${buscarEscuela}`)
             setListSearchSchool(response.data)
         } catch (error) {
             console.log(error)

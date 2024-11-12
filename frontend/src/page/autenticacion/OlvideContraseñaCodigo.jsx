@@ -18,7 +18,7 @@ export default function OlvideContrasenaCodigo() {
         e.preventDefault()
         try {
             const codigo = codigoRef.current.value
-            const response = await axios.put("http://localhost:6008/api/olvidecontrasena/codigo", { email, codigo })
+            const response = await axios.put("https://edufacil.onrender.com/api/olvidecontrasena/codigo", { email, codigo })
             navigate("/autenticacion/olvidecontraseña/contrasena", { state: { idUsuario: response.data, codigo } })
         } catch (error) {
             console.log(error)
@@ -29,7 +29,7 @@ export default function OlvideContrasenaCodigo() {
     }
 
     const requestReenviarCodigo = async () => {
-        await axios.put("http://localhost:6008/api/reenviarcodigo/usuario", { email, isUserNV: false }).catch(err => { 
+        await axios.put("https://edufacil.onrender.com/api/reenviarcodigo/usuario", { email, isUserNV: false }).catch(err => { 
             const { message, numero } = err.response.data
             setErrorNumber(numero)
             setErrorMessage(message)

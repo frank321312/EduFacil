@@ -26,7 +26,7 @@ export default function EditarCuenta() {
 
     useEffect(() => {
         if (user.idUsuario) {
-            createRequestGet(`http://localhost:6008/api/obtenerdatos/${user.idUsuario}`).then(res => setUsuario(res.data)).catch(err => {
+            createRequestGet(`https://edufacil.onrender.com/api/obtenerdatos/${user.idUsuario}`).then(res => setUsuario(res.data)).catch(err => {
                 tokenError(err)
             })
         }
@@ -64,7 +64,7 @@ export default function EditarCuenta() {
     const requestUpdateUser = async (e) => {
         e.preventDefault()
         try {
-            await createRequestPut("http://localhost:6008/api/editar", {
+            await createRequestPut("https://edufacil.onrender.com/api/editar", {
                 nombreUsuario: usuario.nombreUsuario,
                 nombre: usuario.nombre,
                 apellido: usuario.apellido,

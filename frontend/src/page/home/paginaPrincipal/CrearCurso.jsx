@@ -20,14 +20,14 @@ export default function CrearCurso() {
 
     useEffect(() => {
         if (user.idUsuario) {
-            axios.get("http://localhost:6008/api/turnos").then(res => setTurnos(res.data)).catch(err => console.log(err))
+            axios.get("https://edufacil.onrender.com/api/turnos").then(res => setTurnos(res.data)).catch(err => console.log(err))
         }
     }, [user.idEscuela])
 
     const requestCreateCurso = async (e) => {
         e.preventDefault()
         try {
-            await createRequestPost("http://localhost:6008/api/crearcurso", { anio, division, idEscuela: user.idEscuela, idTurno: turnoRef.current.value })
+            await createRequestPost("https://edufacil.onrender.com/api/crearcurso", { anio, division, idEscuela: user.idEscuela, idTurno: turnoRef.current.value })
             setErrorNumber(0)
             setErrorMessage("")
         } catch (error) {

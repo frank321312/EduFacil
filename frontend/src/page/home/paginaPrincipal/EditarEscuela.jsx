@@ -44,7 +44,7 @@ export default function EditarEscuela() {
 
     useEffect(() => {
         if (user.idEscuela) {
-            axios.get(`http://localhost:6008/api/escuela/id/${user.idEscuela}`).then(res => {
+            axios.get(`https://edufacil.onrender.com/api/escuela/id/${user.idEscuela}`).then(res => {
                 setEscuela(res.data)
                 setErrorNumber(0)
                 setErrorMessage("")
@@ -68,13 +68,13 @@ export default function EditarEscuela() {
     const requestUpdateEscuela = async (e, response) => {
         e.preventDefault()
         try {
-            await createRequestPut("http://localhost:6008/api/modificar/escuela", {
+            await createRequestPut("https://edufacil.onrender.com/api/modificar/escuela", {
                 idEscuela: user.idEscuela,
                 nombre: escuela.nombre,
                 email: escuela.email,
                 telefono: escuela.telefono,
                 direccion: escuela.direccion,
-                imgUrl: response.length > 0 ? `http://localhost:6008/get-imagen/${response}` : undefined
+                imgUrl: response.length > 0 ? `https://edufacil.onrender.com/get-imagen/${response}` : undefined
             })
             setErrorNumber("")
             setErrorMessage("")
@@ -101,12 +101,12 @@ export default function EditarEscuela() {
             if (change) {
                 const formData = new FormData()
                 formData.append("imagen", defaultImg[0])
-                const responseImg = await createRequestPost("http://localhost:6008/api/upload", formData)
+                const responseImg = await createRequestPost("https://edufacil.onrender.com/api/upload", formData)
                 response = responseImg.data.archivo
             } else if (defaultImg.length > 0) {
                 const formData = new FormData()
                 formData.append("imagen", defaultImg[0])
-                const responseImg = await createRequestPost("http://localhost:6008/api/upload", formData)
+                const responseImg = await createRequestPost("https://edufacil.onrender.com/api/upload", formData)
                 response = responseImg.data.archivo
             } else {
                 response = "";

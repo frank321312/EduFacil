@@ -18,7 +18,7 @@ export default function InfoCurso({ cursos }) {
 
     const requestObtenerHorario = async (fila) => {
         try {
-            const response = await axios.get(`http://localhost:6008/api/obtener-horario/${fila.idCurso}`)
+            const response = await axios.get(`https://edufacil.onrender.com/api/obtener-horario/${fila.idCurso}`)
             if (response.data.length == 0) {
                 if (card) {
                     setTimeout(() => {

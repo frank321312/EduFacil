@@ -18,12 +18,12 @@ export default function Cursos() {
             navigate("/escuelas")
         }
         if (idEscuela !== undefined && curso !== undefined) {
-            axios.get(`http://localhost:6008/api/obtenercurso/${idEscuela}/${curso}`)
+            axios.get(`https://edufacil.onrender.com/api/obtenercurso/${idEscuela}/${curso}`)
             .then(res => { setCursos([...res.data]) })
             .catch(err => console.log(err))
             setBuscarCurso(curso)
         } else {
-            axios.get(`http://localhost:6008/api/obtenercursos/${escuela.idEscuela}`)
+            axios.get(`https://edufacil.onrender.com/api/obtenercursos/${escuela.idEscuela}`)
             .then(res => { setCursos([...res.data]) })
             .catch(err => console.log(err))
         }
@@ -32,7 +32,7 @@ export default function Cursos() {
     const requestSearchCurso = async (e) => {
         e.preventDefault()
         try { 
-            const responseCurso = await axios.get(`http://localhost:6008/api/obtenercurso/${escuela.idEscuela}/${buscarCurso}`)
+            const responseCurso = await axios.get(`https://edufacil.onrender.com/api/obtenercurso/${escuela.idEscuela}/${buscarCurso}`)
             console.log(responseCurso)
             setCursos([...responseCurso.data])
             navigate(`/escuela/cursos/${escuela.idEscuela}/${buscarCurso}`, { state: escuela })

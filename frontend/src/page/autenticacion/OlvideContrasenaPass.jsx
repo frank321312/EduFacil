@@ -16,7 +16,7 @@ export default function OlvideContrasena() {
     const requestOlvideContrasena = async (e) => {
         e.preventDefault()
         try {
-            await axios.put("http://localhost:6008/api/olvidecontrasena/passowrd", { idUsuario, codigo, password: passwordRef.current.value })
+            await axios.put("https://edufacil.onrender.com/api/olvidecontrasena/passowrd", { idUsuario, codigo, password: passwordRef.current.value })
             navigate("/autenticacion/iniciarsesion")
         } catch (error) {
             console.log(error)

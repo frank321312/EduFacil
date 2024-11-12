@@ -14,11 +14,11 @@ export default function Escuelas() {
     useEffect(() => {
         const busqueda = searchParams.get("busqueda")
         if (busqueda != null) {
-            axios.get(`http://localhost:6008/api/escuela?nombre=${busqueda}`).then(
+            axios.get(`https://edufacil.onrender.com/api/escuela?nombre=${busqueda}`).then(
                 res => { setEscuelas(res.data);}
             ).catch(err => console.log(err))
         } else {
-            axios.get("http://localhost:6008/api/obtenerescuelas").then(
+            axios.get("https://edufacil.onrender.com/api/obtenerescuelas").then(
                 res => { setEscuelas(res.data) }
             ).catch(err => console.log(err))
         }

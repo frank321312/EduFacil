@@ -32,7 +32,7 @@ export default function RegistroEscuela() {
                 email: emailRef.current.value,
                 telefono: telefonoRef.current.value
             }
-            const response = await axios.post("http://localhost:6008/api/escuelanv", data)
+            const response = await axios.post("https://edufacil.onrender.com/api/escuelanv", data)
             console.log(response)
             navigate("/autenticacion/registro", { state: { idRol: idRol, idEscuelaNV: response.data.escuela, emailEscuela: emailRef.current.value } })
         } catch (error) {

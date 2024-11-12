@@ -51,7 +51,7 @@ export default function EditarHorario() {
 
     useEffect(() => {
         if (user.idEscuela) {
-            axios.get(`http://localhost:6008/api/obtenercursos/${user.idEscuela}`)
+            axios.get(`https://edufacil.onrender.com/api/obtenercursos/${user.idEscuela}`)
                 .then(res => {
                     setCursos(res.data)
                     if (res.data.length == 0) {
@@ -67,7 +67,7 @@ export default function EditarHorario() {
     const loadHorario = async (cursoId) => {
         console.log("Funciona")
         try {
-            const response = await axios.get(`http://localhost:6008/api/obtener-horario/${cursoId}`);
+            const response = await axios.get(`https://edufacil.onrender.com/api/obtener-horario/${cursoId}`);
             setData(response.data);  // Asume que la respuesta tiene el formato correcto
         } catch (error) {
             console.log(error);
@@ -77,7 +77,7 @@ export default function EditarHorario() {
     const requestUpdateHorario = async (e) => {
         e.preventDefault()
         try {
-            await createRequestPost("http://localhost:6008/api/editar-horario", { tabla: data, idCurso: cursoRef.current.value })
+            await createRequestPost("https://edufacil.onrender.com/api/editar-horario", { tabla: data, idCurso: cursoRef.current.value })
             setErrorNumber(0)
             setErrorMessage("")
         } catch (error) {
@@ -91,7 +91,7 @@ export default function EditarHorario() {
 
     useEffect(() => {
         if (idCurso != 0) {
-            axios.get(`http://localhost:6008/api/obtener-horario/${idCurso}`).then(res => {
+            axios.get(`https://edufacil.onrender.com/api/obtener-horario/${idCurso}`).then(res => {
 
                 setData(res.data)
             }).catch(err => {

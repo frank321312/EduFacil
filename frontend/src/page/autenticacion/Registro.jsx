@@ -34,7 +34,7 @@ export default function Registro() {
 
     const handleSearchEscuela = async (e) => {
         try {
-            const response = await axios.get(`http://localhost:6008/api/escuela?nombre=${e.target.value}`)
+            const response = await axios.get(`https://edufacil.onrender.com/api/escuela?nombre=${e.target.value}`)
             setEscuelas([...response.data])
         } catch (error) {
             console.log(error);
@@ -55,7 +55,7 @@ export default function Registro() {
                 idEscuela: idEscuelaNV !== undefined ? idEscuelaNV : id[0] == null ? 0 : id[0].idEscuela,
                 idRol: typeof idRol === "object" ? idRol.idRol : idRol
             }
-            const response = await axios.post("http://localhost:6008/api/usuarionv", data)
+            const response = await axios.post("https://edufacil.onrender.com/api/usuarionv", data)
             // console.log(response)
             setErrorMessage("")
             setErrorNumber(0)

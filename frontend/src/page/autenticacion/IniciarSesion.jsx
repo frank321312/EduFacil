@@ -24,7 +24,7 @@ export default function IniciarSesion() {
     const loginAxios = async (e) => {
         try {
             e.preventDefault()
-            const response = await axios.post("http://localhost:6008/api/login", { emailUsername: usernameRef.current.value, password: passwordRef.current.value })
+            const response = await axios.post("https://edufacil.onrender.com/api/login", { emailUsername: usernameRef.current.value, password: passwordRef.current.value })
             setErrorMessage("")
             setErrorNumber(0)
             cookies.set("jwt", response.data)

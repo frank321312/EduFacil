@@ -14,7 +14,7 @@ export default function OlvideContrasenaEmail() {
     const requestOlvideContrasena = async (e) => {
         e.preventDefault()
         try {
-            await axios.put("http://localhost:6008/api/olvidecontrasena/email", { email: emailRef.current.value })
+            await axios.put("https://edufacil.onrender.com/api/olvidecontrasena/email", { email: emailRef.current.value })
             navigate("/autenticacion/olvidecontraseña/codigo", { state: emailRef.current.value })
         } catch (error) {
             console.log(error)

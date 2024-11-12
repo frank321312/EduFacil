@@ -71,7 +71,7 @@ export default function EditarCursos() {
     const requestSaveChange = async (e, curso) => {
         e.preventDefault()
         try {
-            await createRequestPut(`http://localhost:6008/api/modificar-curso/${curso.idCurso}`, { anio: curso.anio, division: curso.division, idTurno: curso.turno.idTurno })
+            await createRequestPut(`https://edufacil.onrender.com/api/modificar-curso/${curso.idCurso}`, { anio: curso.anio, division: curso.division, idTurno: curso.turno.idTurno })
             setErrorNumber(0)
             setErrorMessage("")
             if (card) {
@@ -100,7 +100,7 @@ export default function EditarCursos() {
     const requestDeleteCurso = async (e, curso) => {
         e.preventDefault()
         try {
-            await createRequestDelete(`http://localhost:6008/api/eliminar-curso/${curso.idCurso}`)
+            await createRequestDelete(`https://edufacil.onrender.com/api/eliminar-curso/${curso.idCurso}`)
             setErrorNumber(0)
             setErrorMessage("")
             if (card) {
@@ -128,7 +128,7 @@ export default function EditarCursos() {
 
     useEffect(() => {
         if (usuario.idEscuela !== 0) {
-            axios.get(`http://localhost:6008/api/obtenercursos/${usuario.idEscuela}`).then(res => {
+            axios.get(`https://edufacil.onrender.com/api/obtenercursos/${usuario.idEscuela}`).then(res => {
                 const cursosRes = res.data.map(x => {
                     return {
                         ...x,
@@ -139,7 +139,7 @@ export default function EditarCursos() {
             }).catch(err => {
                 console.log(err)
             })
-            axios.get("http://localhost:6008/api/turnos").then(res => setTurnos(res.data)).catch(err => console.log(err))
+            axios.get("https://edufacil.onrender.com/api/turnos").then(res => setTurnos(res.data)).catch(err => console.log(err))
         }
     }, [usuario.idEscuela])
 

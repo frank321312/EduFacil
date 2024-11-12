@@ -13,7 +13,7 @@ export default function SearchInput() {
 
     const handleSearchEscuela = async (e) => {
         try {
-            const response = await axios.get(`http://localhost:6008/api/escuela?nombre=${e.target.value}`)
+            const response = await axios.get(`https://edufacil.onrender.com/api/escuela?nombre=${e.target.value}`)
             setResultados(response.data)
             console.log(response.data)
         } catch (error) {
