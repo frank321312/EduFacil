@@ -1,108 +1,79 @@
-# EduFacil
-
-```mermaid
-    erDiagram
-    Rol {
-        VARCHAR(45) Nombre
-        INT IdRol PK
+erDiagram
+    usuario_no_validado {
+        INT idUsuario
+        VARCHAR(45) nombreUsuario
+        VARCHAR(45) nombre
+        VARCHAR(45) apellido
+        VARCHAR(45) password
+        VARCHAR(45) email
+        DATETIME fechaIngreso
+        VARCHAR(4) codigo
+        TINYINT tipo
+        INT idEscuela
     }
-
-    UsuarioNoValidado {
-        VARCHAR(45) NombreUsuario
-        VARCHAR(45) Nombre
-        VARCHAR(45) Apellido
-        VARCHAR(75) Email
-        VARCHAR(45) Password
-        INT IdUsuarioNoValidado PK
-        BOOL Bloqueado
-        BOOL Habilitado
-        DATETIME FechaIngreso
-        VARCHAR(5) Codigo
-        INT IdRol FK
-        INT IdEscuela FK
+    
+    turno {
+        INT idTurno
+        VARCHAR(20) nombre
     }
-
-    Usuario {
-        VARCHAR(45) NombreUsuario
-        VARCHAR(45) Nombre
-        VARCHAR(45) Apellido
-        VARCHAR(75) Email
-        VARCHAR(45) Password
-        INT IdUsuario PK
-        BOOL Bloqueado
-        BOOL Habilitado
-        DATETIME FechaIngreso
-        DATETIME FechaEgreso
-        VARCHAR(5) Codigo
-        INT IdRol FK
-        INT IdEscuela FK
+    
+    curso {
+        INT idCurso
+        SMALLINT anio
+        VARCHAR(3) division
+        INT idEscuela
+        INT idTurno
     }
-  
-    EscuelaNoValidada {
-        INT IdEscuela PK
-        VARCHAR(150) Nombre
-        VARCHAR(75) Email
-        VARCHAR(100) Direccion
-        VARCHAR(20) Telefono
-        VARCHAR(5) Codigo
-        BOOL Bloqueado
-        DATETIME FechaIngreso
+    
+    horario {
+        INT idHorario
+        VARCHAR(255) contenido
+        INT fila
+        INT idCurso
     }
-
-    Escuela {
-        INT IdEscuela PK
-        VARCHAR(150) Nombre
-        VARCHAR(75) Email
-        VARCHAR(100) Direccion
-        VARCHAR(20) Telefono
-        VARCHAR(5) Codigo
-        VARCHAR(255) imagenUrl
-        BOOL Bloqueado
-        DATETIME FechaIngreso
-        DATETIME FechaEgreso
+    
+    escuela {
+        INT idEscuela
+        VARCHAR(150) nombre
+        VARCHAR(100) email
+        VARCHAR(45) direccion
+        VARCHAR(10) telefono
+        VARCHAR(25) codigo
+        DATETIME fechaIngreso
+        DATE deleted
     }
-
-    Horario {
-        INT IdHorario PK
-        INT idCurso FK
-        VARCHAR(25) Hora
-        VARCHAR(25) Duracion
+    
+    usuario {
+        INT idUsuario
+        VARCHAR(45) nombreUsuario
+        VARCHAR(45) nombre
+        VARCHAR(45) apellido
+        VARCHAR(45) password
+        VARCHAR(45) email
+        TINYINT habilitado
+        DATETIME fechaIngreso
+        DATETIME deleted
+        INT idRol
+        INT idEscuela
     }
-
-    Dia {
-        INT IdDia PK
-        VARCHAR(20) Nombre
-        INT idCurso FK
+    
+    rol {
+        INT idRol
+        VARCHAR(25) nombre
     }
-
-    Materia {
-        INT IdEscuela FK
-        INT IdMateria PK
-        VARCHAR(45) Nombre
+    
+    escuela_no_validada {
+        INT idEscuelaNV
+        VARCHAR(150) nombre
+        VARCHAR(100) email
+        VARCHAR(45) direccion
+        VARCHAR(10) telefono
+        VARCHAR(25) codigo
+        DATETIME fechaIngreso
     }
-
-    HorarioMateria {
-        INT IdHorario PK, FK
-        INT IdMateria PK, FK
-    }
-
-    Curso {
-        INT idCurso PK
-        SMALLINT Anio
-        CHAR Division
-        INT IdEscuela FK
-        INT IdTurno FK
-    }
-
-    Turno {
-        INT IdTurno
-        VARCHAR(45) Nombre
-    }
-
-    Rol ||--o{ Usuario : ""
-    Curso }o--|| Turno: ""
-    Curso ||--|| Horario: ""
-    Escuela ||--o{ Usuario: ""
-    Horario ||--o{ HorarioMateria: ""
-    Materia ||--o{ HorarioMateria: ""
-```
+    
+    curso }o--|| turno : "idTurno"
+    curso }o--|| escuela : "idEscuela"
+    horario }o--|| curso : "idCurso"
+    usuario }o--|| rol : "idRol"
+    usuario }o--|| escuela : "idEscuela"

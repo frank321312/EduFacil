@@ -4,6 +4,9 @@
   <img src="https://et12.edu.ar/imgs/computacion/vamoaprogramabanner.png">
 </p>
 
+## DER
+<img src="Der.jpeg">
+
 ## Pre-requisitos 📋
 - **Node.js** (versión 16 o superior)
 - **npm** (gestor de paquetes de Node.js)
@@ -23,13 +26,6 @@ npm run dev
 ```
 - Esto iniciará Vite y podrás acceder a la aplicación desde http://localhost:5173/. Si todo está bien configurado, el frontend debería funcionar correctamente en tu máquina local.
 
-Desplegar el Frontend en producción: 
-- Si todo funciona localmente, puedes crear la versión de producción del frontend ejecutando:
-```
-npm run build
-```
-- Esto generará los archivos estáticos optimizados para producción en una carpeta (probablemente llamada dist). Para desplegar estos archivos en un servidor de producción, sube la carpeta dist a tu servidor y configúralo para servir estos archivos.
-
 Configuración y despliegue del Backend
 Instalar dependencias del backend: 
 - Navega hasta el directorio backend/ y asegúrate de que las dependencias estén instaladas:
@@ -47,7 +43,7 @@ npm start
 - Esto iniciará el servidor y, según el mensaje que compartiste, debería estar corriendo en http://localhost:6008.
 
 Configuración de la base de datos
-- Asegúrate de tener MySQL instalado y corriendo en tu máquina.
+- Asegúrate de tener MySQL instalado y corriendo en tu máquina, tienes que ir a la base de datos  y navegar hasta la carpeta backend.
 Importa el esquema de la base de datos en MySQL ejecutando el siguiente comando:
 ```
 mysql -u root -p
