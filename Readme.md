@@ -69,17 +69,17 @@ source db.sql;
 
 ## Página de Edufacil
 Link del repositorio
-```
-https://github.com/frank321312/EduFacil.git
-```
+
+- https://github.com/frank321312/EduFacil.git
+
 Link de la página EduFacil
-```
-https://edu-facil.vercel.app/
-```
+
+- https://edu-facil.vercel.app/
+
 Link del servidor
-```
-https://edufacil.onrender.com
-```
+
+- https://edufacil.onrender.com
+
 ## Propósito
 El propósito de EduFacil es ofrecer una plataforma integral para la gestión de usuarios, cursos, escuelas y roles en el ámbito educativo. A través de esta aplicación web, se facilita la creación, actualización, eliminación y consulta de entidades relacionadas con las escuelas y sus respectivos cursos, todo gestionado mediante un sistema de API. La autenticación y validación de usuarios se realiza mediante tokens JWT, lo que garantiza la seguridad de la información y el control de acceso según los roles a...
 
