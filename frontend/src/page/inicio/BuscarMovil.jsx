@@ -3,6 +3,7 @@ import { AiOutlineEnter } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { url } from "../../functions/url";
 
 export default function SearchInput() {
     const [buscar, setBuscar] = useState("");
@@ -13,7 +14,7 @@ export default function SearchInput() {
 
     const handleSearchEscuela = async (e) => {
         try {
-            const response = await axios.get(`https://edufacil.onrender.com/api/escuela?nombre=${e.target.value}`)
+            const response = await axios.get(`${url}/api/escuela?nombre=${e.target.value}`)
             setResultados(response.data)
             console.log(response.data)
         } catch (error) {

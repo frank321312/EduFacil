@@ -45,14 +45,32 @@ app.get('/get-imagen/:image', (req, res) => {
 });
 
 app.get("/", (_req: Request, res: Response) => {
-    res.send("Hello world!!!!!")
+    res.send("Servidor funcionando para eduFacil")
 })
 
 app.post("/api/token", (req: Request, res: Response) => {
     try {
         const { token } = req.body
-        jwt.verify(token, process.env.JWT_SECRET_KEY)
-        res.status(204).send()
+        const tk = jwt.verify(token, process.env.JWT_SECRET_KEY)
+        res.json(tk)
+    } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            res.status(401).json({ message: "Token expirado", error: 1 })
+        } else if (error.name === 'JsonWebTokenError') {
+            res.status(400).json({ message: "Token invalido", error: 2 })
+        } else {
+            res.status(500).json({ message: "Error interno del servidor", error: 3 })
+        }
+    }
+})
+
+app.get("/api/token/route", (req: Request, res: Response) => {
+    try {
+        const { authorization } = req.headers
+        const listAuthorization = authorization.split(" ")
+        const token = listAuthorization[1]
+        const tk = jwt.verify(token, process.env.JWT_SECRET_KEY)
+        res.json(tk)
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
             res.status(401).json({ message: "Token expirado", error: 1 })

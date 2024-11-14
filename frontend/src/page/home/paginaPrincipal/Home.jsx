@@ -5,6 +5,7 @@ import axios from "axios"
 import InfoCurso from "../../../components/InfoCurso"
 import { Container } from "react-bootstrap"
 import LayoutHome from "../LayoutHome"
+import { url } from "../../../functions/url"
 
 export default function Home() {
     const usuario = useSelector(state => state.login)
@@ -18,7 +19,7 @@ export default function Home() {
     })
     useEffect(() => {
         if (usuario.idEscuela !== 0) {
-            axios.get(`https://edufacil.onrender.com/api/escuela/id/${usuario.idEscuela}`)
+            axios.get(`${url}/api/escuela/id/${usuario.idEscuela}`)
                 .then(res => {
                     setEscuela(res.data)
                 })
@@ -26,7 +27,7 @@ export default function Home() {
                     console.log(err)
                 })
 
-            axios.get(`https://edufacil.onrender.com/api/obtenercursos/${usuario.idEscuela}`).then(res => {
+            axios.get(`${url}/api/obtenercursos/${usuario.idEscuela}`).then(res => {
                 setCursos(res.data)
             }).catch(err => {
                 console.log(err)

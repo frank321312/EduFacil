@@ -1,3 +1,4 @@
+import { Like } from "typeorm";
 import { AppDataSource } from "../data-source.js";
 import { Escuela } from "../entity/Escuela.js";
 import { Rol } from "../entity/Rol.js";
@@ -50,3 +51,17 @@ export const obtenerDatoUsuarioAuth = async (id: number) => {
 export const obtenerDatoUsuarioAll = async (idUsuario: number) => await AppDataSource.getRepository(Usuario).findBy({ idUsuario })
 
 export const generarNumeroCincoDigitos = () => Math.floor(10000 + Math.random() * 90000)
+
+export const getUser = async (nombre: string, apellido: string, email: string, id: string) => {
+    console.log(nombre, apellido, email, id)
+    return await AppDataSource.getRepository(Usuario)
+        .find({
+            where: [
+                { nombre: Like(`%${nombre}%`), escuela: { idEscuela: Number(id) } },
+                { apellido: Like(`%${apellido}%`), escuela: { idEscuela: Number(id) } },
+                { email: Like(`%${email}%`), escuela: { idEscuela: Number(id) } }
+            ],
+            relations: { escuela: true },
+            select: { idUsuario: true, nombre: true, apellido: true, email: true, fechaIngreso: true, nombreUsuario: true, escuela: { idEscuela: true } }
+        })
+}

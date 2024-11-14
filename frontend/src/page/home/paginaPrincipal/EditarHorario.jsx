@@ -2,11 +2,12 @@ import { Container, Button, Form } from "react-bootstrap";
 import LayoutHome from "../LayoutHome";
 import Table from "react-bootstrap/Table";
 import { useEffect, useRef, useState } from "react";
-import { createRequestPost, createRequestPut } from "../../../functions/configToken";
+import { createRequestDelete, createRequestPost, createRequestPut, tokenError } from "../../../functions/configToken";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { isEqual } from "../../../functions/validations.js";
 import Cookies from "universal-cookie";
+import { url } from "../../../functions/url.js";
 
 export default function EditarHorario() {
     const user = useSelector((state) => state.login)
@@ -49,9 +50,24 @@ export default function EditarHorario() {
         }
     }
 
+    const requestDeleteHorario = async (e) => {
+        e.preventDefault()
+        try {
+            await createRequestDelete(`${url}/api/eliminar-horario/${idCurso}`)
+            setData([])
+            setErrorNumber(0)
+            setErrorMessage("")
+        } catch (error) {
+            const { message, numero } = error.response.data
+            setErrorNumber(numero)
+            setErrorMessage(message)
+            tokenError()
+        }
+    }
+    
     useEffect(() => {
         if (user.idEscuela) {
-            axios.get(`https://edufacil.onrender.com/api/obtenercursos/${user.idEscuela}`)
+            axios.get(`${url}/api/obtenercursos/${user.idEscuela}`)
                 .then(res => {
                     setCursos(res.data)
                     if (res.data.length == 0) {
@@ -65,19 +81,23 @@ export default function EditarHorario() {
     }, [user.idEscuela]);
 
     const loadHorario = async (cursoId) => {
-        console.log("Funciona")
         try {
-            const response = await axios.get(`https://edufacil.onrender.com/api/obtener-horario/${cursoId}`);
-            setData(response.data);  // Asume que la respuesta tiene el formato correcto
+            const response = await axios.get(`${url}/api/obtener-horario/${cursoId}`);
+            setData(response.data);
+            setErrorNumber(0)
+            setErrorMessage("")
         } catch (error) {
             console.log(error);
+            const { message, numero } = error.response.data
+            setErrorNumber(numero)
+            setErrorMessage(message)
         }
     };
 
     const requestUpdateHorario = async (e) => {
         e.preventDefault()
         try {
-            await createRequestPost("https://edufacil.onrender.com/api/editar-horario", { tabla: data, idCurso: cursoRef.current.value })
+            await createRequestPost(`${url}/api/editar-horario`, { tabla: data, idCurso: cursoRef.current.value })
             setErrorNumber(0)
             setErrorMessage("")
         } catch (error) {
@@ -91,8 +111,7 @@ export default function EditarHorario() {
 
     useEffect(() => {
         if (idCurso != 0) {
-            axios.get(`https://edufacil.onrender.com/api/obtener-horario/${idCurso}`).then(res => {
-
+            axios.get(`${url}/api/obtener-horario/${idCurso}`).then(res => {
                 setData(res.data)
             }).catch(err => {
                 console.log(err)
@@ -108,7 +127,8 @@ export default function EditarHorario() {
                     <Button className="" onClick={addColumn}>Agregar columna</Button>
                     <Button className="" onClick={removeRow}>Eliminar última fila</Button>
                     <Button className="" onClick={removeColumn}>Eliminar última columna</Button>
-                    <select ref={cursoRef} className={`rounded-lg transition-input`} style={{ padding: "8px 16px", outline: "none" }} onChange={() => loadHorario(cursoRef.current.value)}>
+                    <Button variant="danger" onClick={requestDeleteHorario}>Eliminar horario</Button>
+                    <select ref={cursoRef} className={`rounded-lg transition-input`} style={{ padding: "8px 16px", outline: "none" }} onChange={(e) => { loadHorario(e.target.value); setIdCurso(e.target.value) }}>
                         {
                             cursos.map(value => (
                                 <option onChange={(e) => console.log(e.target)} key={value.idCurso} value={value.idCurso}>
@@ -119,7 +139,7 @@ export default function EditarHorario() {
                     </select>
                 </div>
                 {
-                    data.length == 0 || idCurso == 0 ? <h2>Este curso no tiene horario</h2>
+                    data.length == 0 || idCurso == 0 ? <h2 className="mt-10 mb-10">Este curso no tiene horario</h2>
                         :
                         <Table responsive bordered hover variant={darkMode.active || cookies.get("modo") ? "dark" : ""} className="mt-3 w-full">
                             <thead>

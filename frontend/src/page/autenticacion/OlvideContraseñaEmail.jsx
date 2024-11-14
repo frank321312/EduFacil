@@ -4,6 +4,7 @@ import LayoutAuth from "./LayoutAuth";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { url } from "../../functions/url";
 
 export default function OlvideContrasenaEmail() {
     const emailRef = useRef(null)
@@ -14,7 +15,7 @@ export default function OlvideContrasenaEmail() {
     const requestOlvideContrasena = async (e) => {
         e.preventDefault()
         try {
-            await axios.put("https://edufacil.onrender.com/api/olvidecontrasena/email", { email: emailRef.current.value })
+            await axios.put(`${url}/api/olvidecontrasena/email`, { email: emailRef.current.value })
             navigate("/autenticacion/olvidecontraseña/codigo", { state: emailRef.current.value })
         } catch (error) {
             console.log(error)

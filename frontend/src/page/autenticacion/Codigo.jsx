@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { decodeToken } from "../../functions/decodeToken";
 import { autenticar } from "../../redux/loginSlice";
 import { Container } from 'react-bootstrap';
+import { url } from "../../functions/url";
 
 export default function AuthCodigo() {
     const [errorMessage, setErrorMessage] = useState("")
@@ -56,7 +57,7 @@ export default function AuthCodigo() {
                     idRol: user.idRol,
                 }
 
-                const responseSchool = await axios.post("https://edufacil.onrender.com/api/escuela", dataSchool)
+                const responseSchool = await axios.post(`${url}/api/escuela`, dataSchool)
                 const dataUser = {
                     ...dataSchool,
                     usuario: {
@@ -66,7 +67,7 @@ export default function AuthCodigo() {
                     idEscuela: responseSchool.data
                 }
 
-                const responseUser = await axios.post("https://edufacil.onrender.com/api/usuario", dataUser)
+                const responseUser = await axios.post(`${url}/api/usuario`, dataUser)
                 cookies.set("jwt", responseUser.data, {
                     path: "/"
                 })
@@ -85,7 +86,7 @@ export default function AuthCodigo() {
                     idEscuela: user.idEscuela,
                     idEscuelaNV: 0
                 }
-                const response = await axios.post("https://edufacil.onrender.com/api/usuario", data)
+                const response = await axios.post(`${url}/api/usuario`, data)
                 cookies.set("jwt", response.data, {
                     path: "/"
                 })
@@ -104,7 +105,7 @@ export default function AuthCodigo() {
                     idEscuela: user.idEscuela,
                     idEscuelaNV: 0
                 }
-                const response = await axios.post("https://edufacil.onrender.com/api/usuario", data)
+                const response = await axios.post(`${url}/api/usuario`, data)
                 cookies.set("jwt", response.data, {
                     path: "/"
                 })
@@ -121,7 +122,7 @@ export default function AuthCodigo() {
     }
     console.log(user)
     const requestReenviarCodigoEscuela = async () => {
-        await axios.put("https://edufacil.onrender.com/api/reenviarcodigo/escuela", { idEscuelaNV: user.idEscuelaNV }).then(() => {
+        await axios.put(`${url}/api/reenviarcodigo/escuela`, { idEscuelaNV: user.idEscuelaNV }).then(() => {
             setErrorNumber(0)
             setErrorMessage("")
         })
@@ -133,7 +134,7 @@ export default function AuthCodigo() {
     }
 
     const requestReenviarCodigoUsuario = async () => {
-        await axios.put("https://edufacil.onrender.com/api/reenviarcodigo/usuario", { email: user.email, isUserNV: true }).then(() => {
+        await axios.put(`${url}/api/reenviarcodigo/usuario`, { email: user.email, isUserNV: true }).then(() => {
             setErrorNumber(0)
             setErrorMessage("")
         })

@@ -2,14 +2,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import PaginaPrincipal from './page/inicio/Inicio'
 import Registro from './page/autenticacion/Registro'
 import ElegirOpcion from './page/autenticacion/Opcion'
 import IniciarSesion from './page/autenticacion/IniciarSesion'
 import RegistroEscuela from './page/autenticacion/Escuela'
 import LayoutHome from './page/home/LayoutHome'
-import { ProtectedRoute } from './components/ProtectedRoute'
+import { ProtectedRoute, ProtectedRouteLogin, ProtectedRouteRol } from './components/ProtectedRoute'
 import Home from './page/home/paginaPrincipal/Home'
 import Cookies from 'universal-cookie'
 import { autenticar } from './redux/loginSlice'
@@ -30,11 +30,16 @@ import VerHorario from './page/home/paginaPrincipal/VerHorario'
 import BuscadorMovil from './page/inicio/BuscarMovil'
 import EditarHorario from './page/home/paginaPrincipal/EditarHorario'
 import EditarCursos from './page/home/paginaPrincipal/EditarCurso'
+import VerUsuarios from './page/home/paginaPrincipal/VerUsuarios'
+import EnviarEmail from './page/home/paginaPrincipal/EnviarEmail'
+import axios from 'axios'
+import { url } from './functions/url'
 
 function App() {
   const data = useSelector(state => state.login)
   const dispatch = useDispatch()
   const cookies = new Cookies()
+  const [usuario, setUsuario] = useState(null)
 
   useEffect(() => {
     const token = cookies.get("jwt")
@@ -46,26 +51,40 @@ function App() {
     if (modo !== undefined) {
       document.body.classList.add(modo)
     }
-  }, [])
+
+    if (data.idUsuario != 0) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+      axios.get(`${url}/api/token/route`, config)
+        .then(res => {
+          console.log(res.data)
+          setUsuario(res.data)
+        }).catch(err => {
+          console.log(err)
+          setUsuario(null)
+        })
+    }
+  }, [data.idUsuario])
 
   return (
 
     <Router>
       <Routes>
-        {/* <Route element={<ProtectedRoute isAllowed={idRol !== 0 ? true : false} />}>
-          <Route path="/autenticacion/escuela" element={<RegistroEscuela />} />
-          <Route path="/autenticacion/registro" element={<Registro />} />
-        </Route> */}
 
         {/* Rutas para autenticacion de usuario */}
-        <Route path="/autenticacion/escuela" element={<RegistroEscuela />} />
-        <Route path="/autenticacion/opcion" element={<ElegirOpcion />} />
-        <Route path="/autenticacion/registro" element={<Registro />} />
-        <Route path="/autenticacion/codigo" element={<AuthCodigo />} />
-        <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />
-        <Route path="/autenticacion/olvidecontraseña/email" element={<OlvideContrasenaEmail />} />
-        <Route path="/autenticacion/olvidecontraseña/codigo" element={<OlvideContrasenaCodigo />} />
-        <Route path="/autenticacion/olvidecontraseña/contrasena" element={<OlvideContrasena />} />
+        <Route element={<ProtectedRouteLogin redirectTo='/home' />}>
+          <Route path="/autenticacion/escuela" element={<RegistroEscuela />} />
+          <Route path="/autenticacion/opcion" element={<ElegirOpcion />} />
+          <Route path="/autenticacion/registro" element={<Registro />} />
+          <Route path="/autenticacion/codigo" element={<AuthCodigo />} />
+          <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />
+          <Route path="/autenticacion/olvidecontraseña/email" element={<OlvideContrasenaEmail />} />
+          <Route path="/autenticacion/olvidecontraseña/codigo" element={<OlvideContrasenaCodigo />} />
+          <Route path="/autenticacion/olvidecontraseña/contrasena" element={<OlvideContrasena />} />
+        </Route>
 
         {/* Rutas que pueden ser accedidas por cualquier usuario */}
         <Route path="/escuelas" element={<Escuelas />} />
@@ -75,18 +94,21 @@ function App() {
         <Route path="/horario" element={<VerHorario />} />
         <Route path="/buscar" element={<BuscadorMovil />} />
 
-        {/* Rutas que solo pueden acceder usuarios registrados y logueados */}
-        <Route path="/home" element={<Home />} />
-        <Route path="/home/editar" element={<EditarCuenta />} />
-        <Route path="/home/editar/escuela" element={<EditarEscuela />} />
-        <Route path="/home/crear-curso" element={<CrearCurso />} />
-        <Route path="/home/crear-horario" element={<Horario />} />
-        <Route path="/home/editar-horario" element={<EditarHorario />} />
-        <Route path="/home/editar-cursos" element={<EditarCursos />} />
+        {/* Rutas que solo pueden acceder usuarios registrados o logueados */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/home/editar" element={<EditarCuenta />} />
+          <Route element={<ProtectedRouteRol redirectTo='/home' />}>
+            <Route path="/home/editar/escuela" element={<EditarEscuela />} />
+            <Route path="/home/crear-curso" element={<CrearCurso />} />
+            <Route path="/home/crear-horario" element={<Horario />} />
+            <Route path="/home/editar-horario" element={<EditarHorario />} />
+            <Route path="/home/editar-cursos" element={<EditarCursos />} />
+            <Route path="/home/ver-usuarios" element={<VerUsuarios />} />
+            <Route path="/home/enviar-email" element={<EnviarEmail />} />
+          </Route>
+        </Route>
 
-        {/* <Route element={<ProtectedRoute isAllowed={count === 0 ? false : true}/>}>
-          <Route path="/autenticacion/iniciarsesion" element={<IniciarSesion />} />
-        </Route> */}
         {/* Ruta no encontrada */}
         <Route path='*' element={<NotFound />} />
         <Route path='/url-invalido' element={<URLInvalido />} />

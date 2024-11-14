@@ -84,3 +84,14 @@
 .input-horario {
     color: #000 !important;
 }
+
+@media (max-width: 410px) {
+    .editar-curso-responsive {
+        width: 376px;
+        overflow-y: hidden;
+    }
+}
+
+.mode-dark .mode-text-white {
+    color: #fff !important;
+}

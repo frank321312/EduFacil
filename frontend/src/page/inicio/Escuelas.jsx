@@ -4,6 +4,7 @@ import axios from "axios";
 import { Col, Row } from "react-bootstrap";
 import EscuelasList from "../../components/EscuelaList";
 import { useLocation, useSearchParams } from "react-router-dom";
+import { url } from "../../functions/url";
 
 export default function Escuelas() {
     const [escuelas, setEscuelas] = useState([])
@@ -14,11 +15,11 @@ export default function Escuelas() {
     useEffect(() => {
         const busqueda = searchParams.get("busqueda")
         if (busqueda != null) {
-            axios.get(`https://edufacil.onrender.com/api/escuela?nombre=${busqueda}`).then(
+            axios.get(`${url}/api/escuela?nombre=${busqueda}`).then(
                 res => { setEscuelas(res.data);}
             ).catch(err => console.log(err))
         } else {
-            axios.get("https://edufacil.onrender.com/api/obtenerescuelas").then(
+            axios.get(`${url}/api/obtenerescuelas`).then(
                 res => { setEscuelas(res.data) }
             ).catch(err => console.log(err))
         }

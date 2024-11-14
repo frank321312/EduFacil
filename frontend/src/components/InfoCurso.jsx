@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CardInfo from "./CardInfo";
+import { url } from "../functions/url";
 // style={{ backgroundColor: "#1C2126" }}
 export default function InfoCurso({ cursos }) {
     const navigate = useNavigate()
@@ -18,7 +19,7 @@ export default function InfoCurso({ cursos }) {
 
     const requestObtenerHorario = async (fila) => {
         try {
-            const response = await axios.get(`https://edufacil.onrender.com/api/obtener-horario/${fila.idCurso}`)
+            const response = await axios.get(`${url}/api/obtener-horario/${fila.idCurso}`)
             if (response.data.length == 0) {
                 if (card) {
                     setTimeout(() => {

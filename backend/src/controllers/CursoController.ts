@@ -98,7 +98,7 @@ export class CursoController {
             const cursoRepository = AppDataSource.getRepository(Curso)
             const turno = await AppDataSource.getRepository(Turno).findOneByOrFail({ idTurno })
             const curso = await cursoRepository.findOneOrFail({ where: { idCurso: Number(idCurso) }, relations: { escuela: true } })
-            const existeCurso = await cursoRepository.exists({ where: { anio: curso.anio, division: curso.division, escuela: curso.escuela } })
+            const existeCurso = await cursoRepository.exists({ where: { anio: curso.anio, division: curso.division, turno: turno, escuela: curso.escuela } })
             if (existeCurso) {
                 throw new ValidationError("Ya existe ese curso", 30)
             }

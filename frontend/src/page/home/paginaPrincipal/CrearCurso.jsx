@@ -7,6 +7,7 @@ import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { createRequestPost, tokenError } from "../../../functions/configToken";
+import { url } from "../../../functions/url";
 
 export default function CrearCurso() {
     const user = useSelector((state) => state.login)
@@ -20,14 +21,14 @@ export default function CrearCurso() {
 
     useEffect(() => {
         if (user.idUsuario) {
-            axios.get("https://edufacil.onrender.com/api/turnos").then(res => setTurnos(res.data)).catch(err => console.log(err))
+            axios.get(`${url}/api/turnos`).then(res => setTurnos(res.data)).catch(err => console.log(err))
         }
     }, [user.idEscuela])
 
     const requestCreateCurso = async (e) => {
         e.preventDefault()
         try {
-            await createRequestPost("https://edufacil.onrender.com/api/crearcurso", { anio, division, idEscuela: user.idEscuela, idTurno: turnoRef.current.value })
+            await createRequestPost(`${url}/api/crearcurso`, { anio, division, idEscuela: user.idEscuela, idTurno: turnoRef.current.value })
             setErrorNumber(0)
             setErrorMessage("")
         } catch (error) {

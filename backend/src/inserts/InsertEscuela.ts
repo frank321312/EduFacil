@@ -1,4 +1,5 @@
 import { insertarEscuela, insertarEscuelaNV } from "../functions/EscuelaFunc.js";
+import { url } from "../functions/verifyToken.js";
 
 export async function insertEscuela() {
     await insertarEscuela({
@@ -7,7 +8,7 @@ export async function insertEscuela() {
         direccion: "Ruta 40 Km 123, Mendoza",
         telefono: "+54 261 6543-2100",
         codigo: "10045",
-        imgUrl: `http://localhost:6008/get-imagen/et12de1_logo.jpg`
+        imgUrl: `${url}/get-imagen/et12de1_logo.jpg`
     })
 
     await insertarEscuela({
@@ -16,7 +17,7 @@ export async function insertEscuela() {
         direccion: "Av. Libertador 456, Córdoba",
         telefono: "+54 351 9876-5432",
         codigo: "10046",
-        imgUrl: `http://localhost:6008/get-imagen/et12de1_logo.jpg`
+        imgUrl: `${url}/get-imagen/et12de1_logo.jpg`
     })
 
     await insertarEscuela({
@@ -25,7 +26,7 @@ export async function insertEscuela() {
         direccion: "Calle Falsa 123, Buenos Aires",
         telefono: "+54 11 1234-5678",
         codigo: "10047",
-        imgUrl: `http://localhost:6008/get-imagen/et12de1_logo.jpg`
+        imgUrl: `${url}/get-imagen/et12de1_logo.jpg`
     })
 
     await insertarEscuela({
@@ -34,7 +35,7 @@ export async function insertEscuela() {
         direccion: "Calle Mitre 789, Rosario",
         telefono: "+54 341 2345-6789",
         codigo: "10048",
-        imgUrl: `http://localhost:6008/get-imagen/et12de1_logo.jpg`
+        imgUrl: `${url}/get-imagen/et12de1_logo.jpg`
     })
     
     await insertarEscuela({
@@ -43,7 +44,7 @@ export async function insertEscuela() {
         direccion: "Av. San Martín 567, Tucumán",
         telefono: "+54 381 9876-5432",
         codigo: "10049",
-        imgUrl: `http://localhost:6008/get-imagen/et12de1_logo.jpg`
+        imgUrl: `${url}/get-imagen/et12de1_logo.jpg`
     })
     
     await insertarEscuela({
@@ -52,7 +53,7 @@ export async function insertEscuela() {
         direccion: "Av. Alem 1024, Bahía Blanca",
         telefono: "+54 291 4321-5678",
         codigo: "10050",
-        imgUrl: `http://localhost:6008/get-imagen/et12de1_logo.jpg`
+        imgUrl: `${url}/get-imagen/et12de1_logo.jpg`
     })
     
     await insertarEscuela({
@@ -61,7 +62,7 @@ export async function insertEscuela() {
         direccion: "Calle San Juan 345, La Plata",
         telefono: "+54 221 7654-3210",
         codigo: "10051",
-        imgUrl: `http://localhost:6008/get-imagen/et12de1_logo.jpg`
+        imgUrl: `${url}/get-imagen/et12de1_logo.jpg`
     })
     
     await insertarEscuela({
@@ -70,7 +71,7 @@ export async function insertEscuela() {
         direccion: "Calle Alvear 789, San Juan",
         telefono: "+54 264 8765-4321",
         codigo: "10052",
-        imgUrl: `http://localhost:6008/get-imagen/et12de1_logo.jpg`
+        imgUrl: `${url}/get-imagen/et12de1_logo.jpg`
     })
 }
 

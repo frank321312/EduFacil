@@ -9,6 +9,7 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import InputForm from "../../../components/InputForm";
 import axios from "axios";
 import CardInfo from "../../../components/CardInfo";
+import { url } from "../../../functions/url";
 
 export default function EditarEscuela() {
     const user = useSelector((state) => state.login)
@@ -25,7 +26,6 @@ export default function EditarEscuela() {
     const imgRef = useRef(null)
     const [defaultImg, setDefaultImg] = useState([])
     const [base, setBase] = useState("")
-    // const [response, setResponse] = useState("")
     const [change, setChange] = useState(false)
     const [card, setCard] = useState(false)
 
@@ -44,7 +44,7 @@ export default function EditarEscuela() {
 
     useEffect(() => {
         if (user.idEscuela) {
-            axios.get(`https://edufacil.onrender.com/api/escuela/id/${user.idEscuela}`).then(res => {
+            axios.get(`${url}/api/escuela/id/${user.idEscuela}`).then(res => {
                 setEscuela(res.data)
                 setErrorNumber(0)
                 setErrorMessage("")
@@ -68,15 +68,15 @@ export default function EditarEscuela() {
     const requestUpdateEscuela = async (e, response) => {
         e.preventDefault()
         try {
-            await createRequestPut("https://edufacil.onrender.com/api/modificar/escuela", {
+            await createRequestPut(`${url}/api/modificar/escuela`, {
                 idEscuela: user.idEscuela,
                 nombre: escuela.nombre,
                 email: escuela.email,
                 telefono: escuela.telefono,
                 direccion: escuela.direccion,
-                imgUrl: response.length > 0 ? `https://edufacil.onrender.com/get-imagen/${response}` : undefined
+                imgUrl: response.length > 0 ? `${url}/get-imagen/${response}` : undefined
             })
-            setErrorNumber("")
+            setErrorNumber(0)
             setErrorMessage("")
             if (card) {
                 setTimeout(() => {
@@ -101,12 +101,12 @@ export default function EditarEscuela() {
             if (change) {
                 const formData = new FormData()
                 formData.append("imagen", defaultImg[0])
-                const responseImg = await createRequestPost("https://edufacil.onrender.com/api/upload", formData)
+                const responseImg = await createRequestPost(`${url}/api/upload`, formData)
                 response = responseImg.data.archivo
             } else if (defaultImg.length > 0) {
                 const formData = new FormData()
                 formData.append("imagen", defaultImg[0])
-                const responseImg = await createRequestPost("https://edufacil.onrender.com/api/upload", formData)
+                const responseImg = await createRequestPost(`${url}/api/upload`, formData)
                 response = responseImg.data.archivo
             } else {
                 response = "";

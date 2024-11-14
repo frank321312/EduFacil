@@ -4,6 +4,7 @@ import { AppDataSource } from "../data-source.js";
 import { Curso } from "../entity/Curso.js";
 import { Horario } from "../entity/Horario.js";
 import { ValidationError } from "../errors/ValidationError.js";
+import { isNumber } from "../validations/CursoValidation.js";
 
 export class HorarioController {
     async crearHorario(req: Request, res: Response) {
@@ -120,6 +121,26 @@ export class HorarioController {
                 res.status(400).json({ message: error.message, numero: error.error })
             } else if (error.name === "EntityNotFoundError") {
                 res.status(404).json({ message: "Curso no encontrado", numero: 47 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "No se pudo guardar el horario", numero: 48 })
+            }
+        }
+    }
+
+    async eliminarHorario(req: Request, res: Response) {
+        try {
+            const { idCurso } = req.params
+            isNumber(idCurso)
+            const cursoRepository = AppDataSource.getRepository(Curso)
+            const curso = await cursoRepository.findOneByOrFail({ idCurso: Number(idCurso) })
+            await AppDataSource.getRepository(Horario).delete({ curso })
+            res.status(204).send()
+        } catch (error) {
+            if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "Curso no encontrado", numero: 47 })
+            } else if (error.name === "TypeError") {
+                res.status(400).json({ message: error.message, numero: 11 })
             } else {
                 console.log(error)
                 res.status(500).json({ message: "No se pudo guardar el horario", numero: 48 })

@@ -1,17 +1,11 @@
-import { Container } from "react-bootstrap";
-import Footer from "./Footer";
-import NavInicio from "./NavInicio";
+import LayoutHome from "../page/home/LayoutHome";
 
 export default function NotFound() {
     return (
         <>
-            <Container fluid className="px-0 flex flex-col justify-between" style={{ height: "95vh" }}>
-                <NavInicio isSearch={false} />
-                <Container className="mt-20">
-                    <h1 className="text-center">Pagina no encontrada</h1>
-                </Container>
-                <Footer/>
-            </Container>
+            <LayoutHome>
+                    <h1 className="text-center mt-32" style={{ marginBottom: "355px" }}>Pagina no encontrada</h1>
+            </LayoutHome>
         </>
     );
 }

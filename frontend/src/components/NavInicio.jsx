@@ -13,6 +13,7 @@ import Cookies from 'universal-cookie';
 import { requestVerifyToken } from '../functions/verifyToken';
 import { FaRegUserCircle } from "react-icons/fa";
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { url } from '../functions/url';
 
 export default function NavInicio({ isSearch }) {
     const acitve = useSelector((state) => state.darkMode.active)
@@ -44,7 +45,7 @@ export default function NavInicio({ isSearch }) {
 
         setBuscarEscuela(searchParams.get("busqueda") === null ? buscarEscuela : searchParams.get("busqueda"))
         const token = cookies.get("jwt")
-        if (token === undefined) {
+        if (!token) {
             setIsLogin(false)
         } else {
             requestVerifyToken(token).then((res) => setIsLogin(res)).catch(err => setIsLogin(err))
@@ -93,7 +94,7 @@ export default function NavInicio({ isSearch }) {
     const handleSearchEscuela = async (e) => {
         try {
             setBuscarEscuela(e.target.value)
-            const response = await axios.get(`https://edufacil.onrender.com/api/escuela?nombre=${buscarEscuela}`)
+            const response = await axios.get(`${url}/api/escuela?nombre=${buscarEscuela}`)
             setListSearchSchool(response.data)
         } catch (error) {
             console.log(error)
@@ -107,9 +108,7 @@ export default function NavInicio({ isSearch }) {
 
     const handleDeleteToken = () => {
         cookies.remove("jwt")
-        setTimeout(() => {
-            navigate("/")
-        }, 300)
+        navigate("/")
     }
 
     return (
@@ -123,7 +122,7 @@ export default function NavInicio({ isSearch }) {
                         <Nav.Link as={Link} to="/" style={{ fontWeight: "bold" }} className='nav-logo pl-6 mode-dark-text-white'>EduFacil</Nav.Link>
                     </Col>
                     {
-                        windowWidth <= 668 &&
+                        windowWidth <= 1199 &&
                         <Col xs={7} sm={9} className='flex justify-end cursor-pointer' onClick={() => navigate("/buscar")}>
                             <IoSearch size={24} />
                         </Col>
@@ -161,7 +160,7 @@ export default function NavInicio({ isSearch }) {
                                 <Col className='flex gap-5 justify-end relative' sm={7} md={7} lg={7} xl={6} xxl={5}>
                                     <Nav.Link as={Link} to="/escuelas" className='mode-dark-text-white' onClick={() => setBuscarEscuela("")}>Escuelas</Nav.Link>
                                     {
-                                        login.idUsuario !== 2 &&
+                                        login.idRol != 2 &&
                                         <>
                                             <Nav.Link as={Link} to="/home/crear-curso" className='mode-dark-text-white'>Crear curso</Nav.Link>
                                             <Nav.Link as={Link} to="/home/crear-horario" className='mode-dark-text-white'>Crear horario</Nav.Link>
@@ -186,9 +185,10 @@ export default function NavInicio({ isSearch }) {
                                                 <>
                                                     <Nav.Link as={Link} to="/home/editar-horario" className='mode-dark-text-white py-2 animation-link'>Editar horario</Nav.Link>
                                                     <Nav.Link as={Link} to="/home/editar-cursos" className='mode-dark-text-white py-2 animation-link'>Editar cursos</Nav.Link>
+                                                    <Nav.Link as={Link} to="/home/ver-usuarios" className='mode-dark-text-white py-2 animation-link'>Ver usuarios</Nav.Link>
                                                 </>
                                             }
-                                            <Nav.Link as={Link} to="/" className='mode-dark-text-white py-2 animation-link' onClick={handleDeleteToken}>Cerrar sesión</Nav.Link>
+                                            <Nav.Link className='mode-dark-text-white py-2 animation-link' onClick={handleDeleteToken}>Cerrar sesión</Nav.Link>
                                         </div>
                                     }
                                 </Col>
@@ -226,16 +226,17 @@ export default function NavInicio({ isSearch }) {
                                         <Nav.Link as={Link} to="/home/crear-cursos" className='mode-dark-text-white py-2 animation-link'>Editar cursos</Nav.Link>
                                         <Nav.Link as={Link} to="/home/crear-curso" className='mode-dark-text-white py-2 animation-link'>Crear curso</Nav.Link>
                                         <Nav.Link as={Link} to="/home/crear-horario" className='mode-dark-text-white py-2 animation-link'>Crear horario</Nav.Link>
+                                        <Nav.Link as={Link} to="/home/ver-usuarios" className='mode-dark-text-white py-2 animation-link'>Ver usuarios</Nav.Link>
                                     </>
                                 }
-                                {/* <Nav.Link className="py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link> */}
-                                <Nav.Link as={Link} to="/" className='mode-dark-text-white py-2 animation-link' onClick={handleDeleteToken}>Cerrar sesión</Nav.Link>
+                                <Nav.Link className="py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link>
+                                <Nav.Link className='mode-dark-text-white py-2 animation-link' onClick={handleDeleteToken}>Cerrar sesión</Nav.Link>
                             </Container>
                             :
                             <>
                                 <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/autenticacion/opcion">Registrarse</Nav.Link>
                                 <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/autenticacion/iniciarsesion">Iniciar sesion</Nav.Link>
-                                {/* <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link> */}
+                                <Nav.Link className="mb-4 py-2 animation-link" style={{ fontSize: "16px" }} as={Link} to="/escuelas">Buscar escuela</Nav.Link>
                             </>
                     }
                 </Offcanvas.Body>

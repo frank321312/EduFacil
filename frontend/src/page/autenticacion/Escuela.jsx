@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import './auth.css';
+import { url } from "../../functions/url";
 
 export default function RegistroEscuela() {
     const navigate = useNavigate()
@@ -32,7 +33,7 @@ export default function RegistroEscuela() {
                 email: emailRef.current.value,
                 telefono: telefonoRef.current.value
             }
-            const response = await axios.post("https://edufacil.onrender.com/api/escuelanv", data)
+            const response = await axios.post(`${url}/api/escuelanv`, data)
             console.log(response)
             navigate("/autenticacion/registro", { state: { idRol: idRol, idEscuelaNV: response.data.escuela, emailEscuela: emailRef.current.value } })
         } catch (error) {

@@ -34,7 +34,7 @@ GET {{Api_HostAddress}}/api/escuela?nombre=tin
 GET {{Api_HostAddress}}/api/escuela/martin
 
 ### Obtener todos los usuarios
-GET {{Api_HostAddress}}/api/obtenerusuarios?id=2
+GET {{Api_HostAddress}}/api/obtenerusuarios/1
 
 ### Obtener un usuario de una escuela
 GET {{Api_HostAddress}}/api/obtenerusuario?escuela=1&username=Doe

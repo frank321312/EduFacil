@@ -5,6 +5,7 @@ import LayoutAuth from "./LayoutAuth";
 import ColForm from "../../components/ColForm";
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { url } from '../../functions/url';
 
 export default function Registro() {
     const navigate = useNavigate()
@@ -34,7 +35,7 @@ export default function Registro() {
 
     const handleSearchEscuela = async (e) => {
         try {
-            const response = await axios.get(`https://edufacil.onrender.com/api/escuela?nombre=${e.target.value}`)
+            const response = await axios.get(`${url}/api/escuela?nombre=${e.target.value}`)
             setEscuelas([...response.data])
         } catch (error) {
             console.log(error);
@@ -55,7 +56,7 @@ export default function Registro() {
                 idEscuela: idEscuelaNV !== undefined ? idEscuelaNV : id[0] == null ? 0 : id[0].idEscuela,
                 idRol: typeof idRol === "object" ? idRol.idRol : idRol
             }
-            const response = await axios.post("https://edufacil.onrender.com/api/usuarionv", data)
+            const response = await axios.post(`${url}/api/usuarionv`, data)
             // console.log(response)
             setErrorMessage("")
             setErrorNumber(0)

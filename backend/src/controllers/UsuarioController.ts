@@ -5,14 +5,14 @@ import { AppDataSource } from "../data-source.js";
 import { UsuarioNoValidado } from "../entity/UsuarioNoValidado.js";
 import { Rol } from "../entity/Rol.js";
 import { isNumber } from "../validations/CursoValidation.js";
-import { generarNumeroCincoDigitos, insertarUsuario, insertarUsuarioNV, obtenerDatoUsuarioAuth, UsuarioType } from "../functions/UsuarioFunc.js";
+import { generarNumeroCincoDigitos, getUser, insertarUsuario, insertarUsuarioNV, obtenerDatoUsuarioAuth, UsuarioType } from "../functions/UsuarioFunc.js";
 import { Usuario } from "../entity/Usuario.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import jwt from 'jsonwebtoken';
 import { Like } from "typeorm";
 import { EscuelaNoValidada } from "../entity/EscuelaNoValidada.js";
 import { Escuela } from "../entity/Escuela.js";
-import { nodemailerCode } from "../nodemailer/nodemailer.js";
+import { nodemailerArchivoImg, nodemailerArchivoPdf, nodemailerArchivoPng, nodemailerCode } from "../nodemailer/nodemailer.js";
 
 export class UsuarioController {
     async crearUsuarioNV(req: Request, res: Response) {
@@ -25,7 +25,6 @@ export class UsuarioController {
             }
             isNumber(idEscuela)
             validarNombreUsuario(nombreUsuario)
-            console.log(req.body)
             validarNombre(nombre)
             validarApellido(apellido)
             validarCorreo(email)
@@ -152,14 +151,17 @@ export class UsuarioController {
 
     async obtenerUsuarios(req: Request, res: Response) {
         try {
-            const id = req.query.id
-            if (isNaN(Number(id))) {
+            const { idEscuela } = req.params
+            if (isNaN(Number(idEscuela))) {
                 throw new TypeError("Id invalido")
             }
-            const usuarios = await AppDataSource.getRepository(Usuario).find({ where: { escuela: { idEscuela: Number(id) } }, select: { idUsuario: true, nombre: true, apellido: true, email: true, fechaIngreso: true, escuela: { idEscuela: true } } })
-            if (usuarios.length === 0) {
-                return res.json({ message: "No hay usuarios" })
-            }
+            const usuarios = await AppDataSource.getRepository(Usuario).find(
+                {
+                    where: { escuela: { idEscuela: Number(idEscuela) }, rol: [{ idRol: 2 }, { idRol: 3 }] },
+                    relations: { escuela: true },
+                    select: { idUsuario: true, nombreUsuario: true, nombre: true, apellido: true, email: true, fechaIngreso: true, escuela: { idEscuela: true } }
+                }
+            )
             res.json(usuarios)
         } catch (error) {
             if (error.name === "TypeError") {
@@ -175,7 +177,7 @@ export class UsuarioController {
         try {
             const username = req.query.username as string
             const id = req.query.escuela
-            console.log(req.query)
+
             if (isNaN(Number(id))) {
                 throw new TypeError("Id invalido")
             }
@@ -183,18 +185,48 @@ export class UsuarioController {
             const usuarios = await AppDataSource.getRepository(Usuario)
                 .find({
                     where: [
-                        { nombreUsuario: Like(`${username}`), escuela: { idEscuela: Number(id) } },
-                        { nombre: Like(`${username}`), escuela: { idEscuela: Number(id) } },
-                        { apellido: Like(`${username}`), escuela: { idEscuela: Number(id) } }
-                    ], relations: { escuela: true }, select: { idUsuario: true, nombre: true, apellido: true, email: true, fechaIngreso: true, escuela: { idEscuela: true } }
+                        { nombreUsuario: Like(`%${username}%`), escuela: { idEscuela: Number(id) } },
+                        { nombre: Like(`%${username}%`), escuela: { idEscuela: Number(id) } },
+                        { apellido: Like(`%${username}%`), escuela: { idEscuela: Number(id) } }
+                    ],
+                    relations: { escuela: true },
+                    select: { idUsuario: true, nombre: true, apellido: true, email: true, fechaIngreso: true, escuela: { idEscuela: true } }
                 })
-            if (usuarios.length === 0) {
-                return res.status(404).json({ message: "No se encontro al usuario" })
-            }
+
             res.json(usuarios)
         } catch (error) {
             if (error.name === "TypeError") {
                 res.status(400).json({ message: error.message, numero: 36 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "No se pudieron obtener los usuarios", numero: 37 })
+            }
+        }
+    }
+
+    async buscarUsuario(req: Request, res: Response) {
+        try {
+            const username = req.query.username as string
+            const id = req.query.escuela
+
+            const [nombre, apellido, email] = username.split(" ")
+            if (isNaN(Number(id))) {
+                throw new TypeError("Id invalido")
+            }
+            await obtenerEscuela(Number(id))
+            const criterios: any = {}
+            if (nombre) criterios.nombre = Like(`%${nombre}%`)
+            if (apellido) criterios.apellido = Like(`%${apellido}%`)
+            if (email) criterios.email = Like(`%${email}%`)
+            
+            const escuela = await AppDataSource.getRepository(Escuela).findOneByOrFail({ idEscuela: Number(id) })
+            const usuarios = await AppDataSource.getRepository(Usuario).find({ where: { ...criterios, escuela } })
+            res.json(usuarios)
+        } catch (error) {
+            if (error.name === "TypeError") {
+                res.status(400).json({ message: error.message, numero: 36 })
+            } else if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "Usuario no encontrado", numero: 32 })
             } else {
                 console.log(error)
                 res.status(500).json({ message: "No se pudieron obtener los usuarios", numero: 37 })
@@ -371,7 +403,7 @@ export class UsuarioController {
         }
     }
 
-    async ObtenerDatosId(req: Request, res: Response) {
+    async obtenerDatosId(req: Request, res: Response) {
         try {
             const { idUsuario } = req.params
             const usuario = await AppDataSource.getRepository(Usuario).findOneOrFail({ where: { idUsuario: Number(idUsuario) }, select: { nombreUsuario: true, nombre: true, apellido: true, email: true, password: true } })
@@ -379,6 +411,81 @@ export class UsuarioController {
         } catch (error) {
             if (error.name === "EntityNotFoundError") {
                 res.status(404).json({ message: "No se encontro al usuario", numero: 32 })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "Error interno del servidor", numero: 37 })
+            }
+        }
+    }
+
+    async validarCampos(req: Request, res: Response) {
+        try {
+            const { asunto, contenido, idUsuarioEmisor, idUsuarioReceptor } = req.body
+            if (!asunto) {
+                throw new ValidationError("El asunto no puede estar vacio", 40)
+            } else if (asunto.length > 255) {
+                throw new ValidationError("El asunto debe ser corto y conciso, 255 caracteres", 40)
+            }
+            if (!contenido) {
+                throw new ValidationError("El contenido no puede estar vacio", 41)
+            } else if (asunto.length > 500) {
+                throw new ValidationError("El contenido debe ser menor a 500 caracteres", 41)
+            }
+            const usuarioRepository = AppDataSource.getRepository(Usuario)
+            await usuarioRepository.findOneByOrFail({ idUsuario: Number(idUsuarioEmisor) })
+            await usuarioRepository.findOneByOrFail({ idUsuario: Number(idUsuarioReceptor) })
+
+            res.status(204).send()
+        } catch (error) {
+            if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "No se encontro al usuario", numero: 32 })
+            } else if (error.name === "ValidationError") {
+                res.status(400).json({ message: error.message, numero: error.error })
+            } else {
+                console.log(error)
+                res.status(500).json({ message: "Error interno del servidor", numero: 37 })
+            }
+        }
+    }
+
+    async enviarArchivo(req: Request, res: Response) {
+        try {
+            const { asunto, contenido, archivo, idUsuarioEmisor, idUsuarioReceptor } = req.body
+            console.log(req.body)
+            if (!asunto) {
+                throw new ValidationError("El asunto no puede estar vacio", 40)
+            } else if (asunto.length > 255) {
+                throw new ValidationError("El asunto debe ser corto y conciso, 255 caracteres", 40)
+            }
+            if (!contenido) {
+                throw new ValidationError("El contenido no puede estar vacio", 41)
+            } else if (asunto.length > 500) {
+                throw new ValidationError("El contenido debe ser menor a 500 caracteres", 41)
+            }
+            if (!archivo.length) {
+                throw new ValidationError("Archivo invalido", 42)
+            }
+            const usuarioRepository = AppDataSource.getRepository(Usuario)
+            await usuarioRepository.findOneByOrFail({ idUsuario: Number(idUsuarioEmisor) })
+            const usuarioRe = await usuarioRepository.findOneByOrFail({ idUsuario: Number(idUsuarioReceptor) })
+            const formato = archivo.split(".")
+            if (formato[formato.length - 1] == "jpg") {
+                await nodemailerArchivoImg(usuarioRe.email, asunto, contenido, archivo)
+            } else if (formato[formato.length - 1] == "png") {
+                console.log("png")
+                await nodemailerArchivoPng(usuarioRe.email, asunto, contenido, archivo)
+            } else if (formato[formato.length - 1] == "pdf") {
+                console.log("Sappe")
+                await nodemailerArchivoPdf(usuarioRe.email, asunto, contenido, archivo)
+            } else {
+                throw new ValidationError("Tipo de archivo invalido", 37)
+            }
+            res.status(204).send()
+        } catch (error) {
+            if (error.name === "EntityNotFoundError") {
+                res.status(404).json({ message: "No se encontro al usuario", numero: 32 })
+            } else if (error.name === "ValidationError") {
+                res.status(400).json({ message: error.message, numero: error.error })
             } else {
                 console.log(error)
                 res.status(500).json({ message: "Error interno del servidor", numero: 37 })

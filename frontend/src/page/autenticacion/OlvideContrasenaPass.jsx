@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import LayoutAuth from "./LayoutAuth";
 import ColForm from "../../components/ColForm";
 import { Form } from "react-bootstrap";
+import { url } from "../../functions/url";
 
 export default function OlvideContrasena() {
     const location = useLocation()
@@ -16,7 +17,7 @@ export default function OlvideContrasena() {
     const requestOlvideContrasena = async (e) => {
         e.preventDefault()
         try {
-            await axios.put("https://edufacil.onrender.com/api/olvidecontrasena/passowrd", { idUsuario, codigo, password: passwordRef.current.value })
+            await axios.put(`${url}/api/olvidecontrasena/passowrd`, { idUsuario, codigo, password: passwordRef.current.value })
             navigate("/autenticacion/iniciarsesion")
         } catch (error) {
             console.log(error)

@@ -9,6 +9,7 @@ import { isEqual } from "../../../functions/validations";
 import { createRequestGet, createRequestPut, tokenError } from "../../../functions/configToken";
 import { useNavigate } from "react-router-dom";
 import CardInfo from "../../../components/CardInfo";
+import { url } from "../../../functions/url";
 
 export default function EditarCuenta() {
     const user = useSelector((state) => state.login)
@@ -26,7 +27,7 @@ export default function EditarCuenta() {
 
     useEffect(() => {
         if (user.idUsuario) {
-            createRequestGet(`https://edufacil.onrender.com/api/obtenerdatos/${user.idUsuario}`).then(res => setUsuario(res.data)).catch(err => {
+            createRequestGet(`${url}/api/obtenerdatos/${user.idUsuario}`).then(res => setUsuario(res.data)).catch(err => {
                 tokenError(err)
             })
         }
@@ -64,7 +65,7 @@ export default function EditarCuenta() {
     const requestUpdateUser = async (e) => {
         e.preventDefault()
         try {
-            await createRequestPut("https://edufacil.onrender.com/api/editar", {
+            await createRequestPut(`${url}/api/editar`, {
                 nombreUsuario: usuario.nombreUsuario,
                 nombre: usuario.nombre,
                 apellido: usuario.apellido,

@@ -18,3 +18,5 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
         }
     }
 }
+
+export const url = "https://edufacil.onrender.com"

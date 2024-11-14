@@ -10,6 +10,7 @@ import { autenticar } from "../../redux/loginSlice";
 import { decodeToken } from "../../functions/decodeToken";
 import { Link, useNavigate } from "react-router-dom";
 import { Nav } from "react-bootstrap";
+import { url } from "../../functions/url";
 
 export default function IniciarSesion() {
     const usernameRef = useRef(null)
@@ -24,9 +25,10 @@ export default function IniciarSesion() {
     const loginAxios = async (e) => {
         try {
             e.preventDefault()
-            const response = await axios.post("https://edufacil.onrender.com/api/login", { emailUsername: usernameRef.current.value, password: passwordRef.current.value })
+            const response = await axios.post(`${url}/api/login`, { emailUsername: usernameRef.current.value, password: passwordRef.current.value })
             setErrorMessage("")
             setErrorNumber(0)
+            cookies.remove("jwt")
             cookies.set("jwt", response.data)
             const decode = decodeToken(response.data)
             dispatch(autenticar(decode))
